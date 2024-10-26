@@ -1,4 +1,4 @@
-﻿using Microsoft.GS.DPS.Model.ChatHost;
+﻿﻿using Microsoft.GS.DPS.Model.ChatHost;
 using Microsoft.GS.DPS.Storage.ChatSessions.Entities;
 using Microsoft.GS.DPS.Storage.ChatSessions;
 using Microsoft.KernelMemory;
@@ -159,6 +159,7 @@ namespace Microsoft.GS.DPS.API
             //Get the answer from the Kernel Memory
             var answer = await _kernelMemory.Ask(chatRequest.Question + ChatHost.s_additionalPrompt, chatRequest.DocumentIds, context: context);
 
+            answer.Result = System.Text.Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(answer.Result));
             Console.WriteLine($"Question: {answer.Question}");
             Console.WriteLine($"Answer: {answer.Result}");
 
@@ -201,8 +202,13 @@ namespace Microsoft.GS.DPS.API
 
             try
             {
-                answerObject = JsonSerializer.Deserialize<Answer>(returnedChatMessageContent.Content, options: JsonSerializationOptionsCache.JsonSerializationOptionsIgnoreCase);
-
+                //Adding for non English Response.
+                returnedChatMessageContent.Content = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetBytes(returnedChatMessageContent.Content));
+                answerObject = JsonSerializer.Deserialize<Answer>(returnedChatMessageContent.Content, options: new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
             }
             catch
             {
