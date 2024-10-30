@@ -2,7 +2,7 @@
 Additional details about how content processing is handled in the solution. This includes the workflow steps and how to use your own data in the solution.
 
 ### Workflow
-
+![image](../Images/readme_deployment/DocumentProcess.png)
 1. <u>Document upload</u><br/>
 Documents added to blob storage. Processing is triggered based on file check-in.
 
