@@ -1,6 +1,6 @@
 # To get started with Dependabot version updates, you'll need to specify which
 # package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
+# For more details, refer to the documentation:
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
 updates:
@@ -12,31 +12,81 @@ updates:
     commit-message:
       prefix: "build"
     target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
 
-  # .NET NuGet dependencies
+  # .NET NuGet dependencies for Backend API (Multiple Projects)
   - package-ecosystem: "nuget"
-    directory: "/App/backend-api"
+    directory: "/App/backend-api/Microsoft.GS.DPS"
     schedule:
       interval: "monthly"
     commit-message:
       prefix: "build"
-    open-pull-requests-limit: 50
     target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 20
+
   - package-ecosystem: "nuget"
-    directory: "/App/kernel-memory"
+    directory: "/App/backend-api/Microsoft.GS.DPS.Host"
     schedule:
       interval: "monthly"
     commit-message:
       prefix: "build"
-    open-pull-requests-limit: 50
     target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 20
 
-  # npm dependencies for frontend project
+  # .NET NuGet dependencies for Kernel Memory Clients
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory/clients/dotnet/SemanticKernelPlugin"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory/clients/dotnet/WebClient"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
+
+  # .NET NuGet dependencies for Kernel Memory Extensions
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory/extensions/AzureOpenAI"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory/extensions/SQLServer"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
+
+  # .NET NuGet dependencies for Kernel Memory Core Service
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory/service/Core"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 10
+
+  # npm dependencies for Frontend App
   - package-ecosystem: "npm"
     directory: "/App/frontend-app"
     schedule:
       interval: "monthly"
     commit-message:
       prefix: "build"
-    open-pull-requests-limit: 50
     target-branch: "dependentbotchanges"
+    open-pull-requests-limit: 20
