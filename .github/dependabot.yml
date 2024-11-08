@@ -1,0 +1,42 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+version: 2
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    target-branch: "dependentbotchanges"
+
+  # .NET NuGet dependencies
+  - package-ecosystem: "nuget"
+    directory: "/App/backend-api"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    open-pull-requests-limit: 50
+    target-branch: "dependentbotchanges"
+  - package-ecosystem: "nuget"
+    directory: "/App/kernel-memory"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    open-pull-requests-limit: 50
+    target-branch: "dependentbotchanges"
+
+  # npm dependencies for frontend project
+  - package-ecosystem: "npm"
+    directory: "/App/frontend-app"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "build"
+    open-pull-requests-limit: 50
+    target-branch: "dependentbotchanges"
