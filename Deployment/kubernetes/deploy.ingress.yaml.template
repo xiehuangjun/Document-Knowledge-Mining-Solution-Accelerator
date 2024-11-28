@@ -1,3 +1,7 @@
+import yaml
+
+# Load the YAML file
+ingress_yaml = """
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -21,7 +25,7 @@ spec:
       port:
         number: 5900
   rules:
-  - host: {{ fqdn }}
+  - host: "{{ fqdn }}"
     http:
       paths:
       - path: /backend(/|$)(.*)
@@ -40,5 +44,30 @@ spec:
               number: 5900
   tls:
   - hosts:
-    - {{ fqdn }}
+    - "{{ fqdn }}"
     secretName: secret-kmgs
+"""
+
+# Function to validate the required fields
+def validate_ingress(ingress):
+    required_fields = {
+        'fqdn': ingress['spec']['rules'][0]['host'],
+        'cert-manager.io/cluster-issuer': ingress['metadata']['annotations'].get('cert-manager.io/cluster-issuer'),
+        'ingressClassName': ingress['spec'].get('ingressClassName'),
+        'frontapp-service': ingress['spec']['defaultBackend']['service']['name'],
+        'aiservice-service': ingress['spec']['rules'][0]['http']['paths'][0]['backend']['service']['name'],
+        'tls-secret-name': ingress['spec']['tls'][0].get('secretName')
+    }
+
+    # Check each required field
+    for field, value in required_fields.items():
+        if value in [None, '', '{{ fqdn }}']:
+            print(f"ERROR: The field '{field}' is missing or empty.")
+        else:
+            print(f"Field '{field}' is valid: {value}")
+
+# Load YAML data
+ingress_data = yaml.safe_load(ingress_yaml)
+
+# Validate
+validate_ingress(ingress_data)
