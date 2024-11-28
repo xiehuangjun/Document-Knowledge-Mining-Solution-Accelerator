@@ -605,12 +605,33 @@ try {
     #  6-2. Generate Unique backend API fqdn Name - esgdocanalysis-3 digit random number with padding 0
     $dnsName = "kmgs$($(Get-Random -Minimum 0 -Maximum 9999).ToString("D4"))"
 
+    # Validate if the resource group name, public IP name and dns name are provided
+    if ([string]::IsNullOrEmpty($aksResourceGroupName)) {
+        Write-Host "Error: Resource Group name is null or empty." -ForegroundColor Red
+        exit 1  # Exit the script if the resource group name is missing
+    }
+    if ([string]::IsNullOrEmpty($publicIpName)) {
+        Write-Host "Error: Public IP name is null or empty." -ForegroundColor Red
+        exit 1  # Exit the script if the public IP name is missing
+    }
+    if ([string]::IsNullOrEmpty($dnsName)) {
+        Write-Host "Error: DNS name is null or empty." -ForegroundColor Red
+        exit 1  # Exit the script if the dns name is missing
+    }
     #  6-3. Assign DNS Name to the public IP address
     az network public-ip update --resource-group $aksResourceGroupName --name $publicIpName --dns-name $dnsName
-    #  6-4. Get FQDN for the public IP address    
-    $fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
-    Write-Host "FQDN for the public IP address is: $fqdn" -ForegroundColor Green
 
+    #  6-4. Get FQDN for the public IP address
+    $fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
+    
+    # Validate if the FQDN is null or empty
+    if ([string]::IsNullOrEmpty($fqdn)) {
+        Write-Host "No FQDN is associated with the public IP address." -ForegroundColor Red
+        Exit 1 
+    } else {
+        Write-Host "FQDN for the public IP address is: $fqdn" -ForegroundColor Green
+    }    
+        
     # 7. Assign the role for aks system assigned managed identity to App Configuration Data Reader role with the scope of Resourcegroup
     Write-Host "Assign the role for aks system assigned managed identity to App Configuration Data Reader role" -ForegroundColor Green
     # Get vmss resource group name
