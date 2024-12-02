@@ -41,6 +41,23 @@ function successBanner(){
     Write-Host "             |_|            |___/                          "     
 }
 
+function failureBanner(){
+    Write-Host " _____             _                                  _     "
+    Write-Host "|  __ \           | |                                | |    "
+    Write-Host "| |  | | ___ _ __ | | ___  _   _ _ __ ___   ___ _ __ | |_   "
+    Write-Host "| |  | |/ _ \ '_ \| |/ _ \| | | | '_ ` _ \ / _ \ '_ \| __|  "
+    Write-Host "| |__| |  __/ |_) | | (_) | |_| | | | | | |  __/ | | | |_   "
+    Write-Host "|_____/ \___| .__/|_|\___/ \__, |_| |_| |_|\___|_| |_|\__|  "
+    Write-Host "            | |             __/ |                           "
+    Write-Host " ______    _|_|         _  |___/                            "
+    Write-Host "|  ____|  (_) |        | |                                  "
+    Write-Host "| |__ __ _ _| | ___  __| |                                  "
+    Write-Host "|  __/ _` | | |/ _ \/ _` |                                  "
+    Write-Host "| | | (_| | | |  __/ (_| |                                  "
+    Write-Host "|_|  \__,_|_|_|\___|\__,_|                                  "
+}
+
+
 # Function to prompt for parameters with kind messages
 function PromptForParameters {
     param(
@@ -395,10 +412,61 @@ try {
     ###############################################################
     # Get the storage account key
     $storageAccountKey = az storage account keys list --account-name $deploymentResult.StorageAccountName --resource-group $deploymentResult.ResourceGroupName --query "[0].value" -o tsv
+    # Validate if the storage account key is empty or null
+    if ([string]::IsNullOrEmpty($storageAccountKey)) {
+        Write-Host "Storage account key is empty. Exiting and Stopping execution..." -ForegroundColor Red 
+        failureBanner       
+        exit 1  # Exit the script due to Storage account key is empty.  
+    } else {
+        Write-Host "Storage account key retrieved successfully." -ForegroundColor Green
+    }
     ## Construct the connection string manually
     $storageAccountConnectionString = "DefaultEndpointsProtocol=https;AccountName=$($deploymentResult.StorageAccountName);AccountKey=$storageAccountKey;EndpointSuffix=core.windows.net"
+    # Validate if the Storage Account Connection String is empty or null
+    if ([string]::IsNullOrEmpty($storageAccountConnectionString)) {
+        Write-Host "Storage Account Connection String is empty. Exiting and Stopping execution..." -ForegroundColor Red        
+        failureBanner
+        exit 1  # Exit the script due to Storage Account Connection String is empty.  
+    } else {
+        Write-Host "Storage Account Connection String retrieved successfully." -ForegroundColor Green
+    }
     ## Assign the connection string to the deployment result object
-    $deploymentResult.StorageAccountConnectionString = $storageAccountConnectionString    
+    $deploymentResult.StorageAccountConnectionString = $storageAccountConnectionString  
+
+        # Check if ResourceGroupName is valid
+    if ([string]::IsNullOrEmpty($deploymentResult.ResourceGroupName)) {
+        Write-Host "Error: Resource group name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+
+    # Check if AzCosmosDBName is valid
+    if ([string]::IsNullOrEmpty($deploymentResult.AzCosmosDBName)) {
+        Write-Host "Error: Cosmos DB name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+
+    # Check if AzCognitiveServiceName is valid
+    if ([string]::IsNullOrEmpty($deploymentResult.AzCognitiveServiceName)) {
+        Write-Host "Error: Cognitive Service name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+
+    # Check if AzSearchServiceName is valid
+    if ([string]::IsNullOrEmpty($deploymentResult.AzSearchServiceName)) {
+        Write-Host "Error: Azure Search Service name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+
+    # Check if AzOpenAiServiceName is valid
+    if ([string]::IsNullOrEmpty($deploymentResult.AzOpenAiServiceName)) {
+        Write-Host "Error: OpenAI Service name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }  
     # Get MongoDB connection string
     $deploymentResult.AzCosmosDBConnectionString = az cosmosdb keys list --name $deploymentResult.AzCosmosDBName --resource-group $deploymentResult.ResourceGroupName --type connection-strings --query "connectionStrings[0].connectionString" -o tsv
     # Get Azure Cognitive Service API Key
@@ -601,21 +669,22 @@ try {
     #  6-1. Get Az Network resource Name with the public IP address
     Write-Host "Assign DNS Name to the public IP address" -ForegroundColor Green
     $publicIpName=$(az network public-ip list --query "[?ipAddress=='$externalIP'].name" --output tsv)
-
     #  6-2. Generate Unique backend API fqdn Name - esgdocanalysis-3 digit random number with padding 0
     $dnsName = "kmgs$($(Get-Random -Minimum 0 -Maximum 9999).ToString("D4"))"
-
     # Validate if the resource group name, public IP name and dns name are provided
     if ([string]::IsNullOrEmpty($aksResourceGroupName)) {
-        Write-Host "Error: Resource Group name is null or empty." -ForegroundColor Red
+        Write-Host "Error: aks Resource Group name is null or empty." -ForegroundColor Red
+        failureBanner
         exit 1  # Exit the script if the resource group name is missing
     }
     if ([string]::IsNullOrEmpty($publicIpName)) {
         Write-Host "Error: Public IP name is null or empty." -ForegroundColor Red
+        failureBanner
         exit 1  # Exit the script if the public IP name is missing
     }
     if ([string]::IsNullOrEmpty($dnsName)) {
         Write-Host "Error: DNS name is null or empty." -ForegroundColor Red
+        failureBanner
         exit 1  # Exit the script if the dns name is missing
     }
     #  6-3. Assign DNS Name to the public IP address
@@ -623,10 +692,10 @@ try {
 
     #  6-4. Get FQDN for the public IP address
     $fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
-    
     # Validate if the FQDN is null or empty
     if ([string]::IsNullOrEmpty($fqdn)) {
         Write-Host "No FQDN is associated with the public IP address." -ForegroundColor Red
+        failureBanner
         Exit 1 
     } else {
         Write-Host "FQDN for the public IP address is: $fqdn" -ForegroundColor Green
@@ -634,14 +703,49 @@ try {
         
     # 7. Assign the role for aks system assigned managed identity to App Configuration Data Reader role with the scope of Resourcegroup
     Write-Host "Assign the role for aks system assigned managed identity to App Configuration Data Reader role" -ForegroundColor Green
+    # Ensure that the required fields are not null or empty
+    if ([string]::IsNullOrEmpty($deploymentResult.ResourceGroupName)) {
+        Write-Host "Error: Resource group name for AKS deployment is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+    if ([string]::IsNullOrEmpty($deploymentResult.AksName)) {
+        Write-Host "Error: AKS cluster name is null or empty." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+    
     # Get vmss resource group name
     $vmssResourceGroupName = $(az aks show --resource-group $deploymentResult.ResourceGroupName --name $deploymentResult.AksName --query nodeResourceGroup --output tsv)
+    
+    # Validate if vmss Resource Group Name is null or empty
+    if ([string]::IsNullOrEmpty($vmssResourceGroupName)) {
+        Write-Host "Error: Unable to retrieve the VMSS resource group name." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+    
     # Get vmss name
     $vmssName = $(az vmss list --resource-group $vmssResourceGroupName --query "[0].name" --output tsv)
+    
+    # Validate if vmss Name is null or empty
+    if ([string]::IsNullOrEmpty($vmssName)) {
+        Write-Host "Error: Unable to retrieve the VMSS name." -ForegroundColor Red
+        failureBanner
+        exit 1
+    }
+    
     # Create System Assigned Managed Identity
     $systemAssignedIdentity = $(az vmss identity assign --resource-group $vmssResourceGroupName --name $vmssName --query systemAssignedIdentity --output tsv)
     
-    
+    # Validate if System Assigned Identity is null or empty
+    if ([string]::IsNullOrEmpty($systemAssignedIdentity)) {
+        Write-Host "Error: Failed to assign system-assigned managed identity to the VMSS." -ForegroundColor Red
+        failureBanner
+        exit 1
+    } else {
+        Write-Host "Retrived System Assigned Identity is: $systemAssignedIdentity" -ForegroundColor Green
+    }  
     
     # Assign the role for aks system assigned managed identity to App Configuration Data Reader role with the scope of Resourcegroup
     az role assignment create --assignee $systemAssignedIdentity --role "App Configuration Data Reader" --scope $deploymentResult.ResourceGroupId
