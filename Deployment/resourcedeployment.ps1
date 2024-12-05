@@ -667,14 +667,15 @@ try {
     az network public-ip update --resource-group $aksResourceGroupName --name $publicIpName --dns-name $dnsName
 
     #  6-4. Get FQDN for the public IP address
-    $fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
+    #$fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
+     $fqdn = $null
     # Validate if the FQDN is null or empty
     ValidateVariableIsNullOrEmpty -variableValue $fqdn -variableName "FQDN"    
         
     # 7. Assign the role for aks system assigned managed identity to App Configuration Data Reader role with the scope of Resourcegroup
     Write-Host "Assign the role for aks system assigned managed identity to App Configuration Data Reader role" -ForegroundColor Green
     # Ensure that the required fields are not null or empty
-    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.ResourceGroupName -variableName "Resource group name for AKS deployment"    
+    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.ResourceGroupName -variableName "Resource group name"    
     
     ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.AksName -variableName "AKS cluster name"    
         
