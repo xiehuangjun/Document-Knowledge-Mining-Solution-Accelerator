@@ -667,8 +667,8 @@ try {
     az network public-ip update --resource-group $aksResourceGroupName --name $publicIpName --dns-name $dnsName
 
     #  6-4. Get FQDN for the public IP address
-    #$fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
-     $fqdn = $null
+    $fqdn = az network public-ip show --resource-group $aksResourceGroupName --name $publicIpName --query "dnsSettings.fqdn" --output tsv
+     
     # Validate if the FQDN is null or empty
     ValidateVariableIsNullOrEmpty -variableValue $fqdn -variableName "FQDN"    
         
