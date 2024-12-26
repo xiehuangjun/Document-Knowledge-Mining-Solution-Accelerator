@@ -5092,10 +5092,10 @@ i18next@^22.0.3:
   dependencies:
     "@babel/runtime" "^7.20.6"
 
-i18next@^23.2.3:
-  version "23.9.0"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-23.9.0.tgz"
-  integrity sha512-f3MUciKqwzNV//mHG6EtdSlC65+nqH/3zK8sOSWqNV6FVu2tmHhF/rFOp9UF8S4m1odojtuipKaKJrP0Loh60g==
+i18next@^24.2.0:
+  version "24.2.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.2.0.tgz#344c15a6f3b43d02aed78e2b08532e5b170951b4"
+  integrity sha512-ArJJTS1lV6lgKH7yEf4EpgNZ7+THl7bsGxxougPYiXRTJ/Fe1j08/TBpV9QsXCIYVfdE/HWG/xLezJ5DOlfBOA==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
@@ -6020,7 +6020,7 @@ kleur@^3.0.3:
     "@react-pdf-viewer/default-layout" "^3.12.0"
     date-fns "^4.1.0"
     dropzone "^6.0.0-beta.2"
-    i18next "^23.2.3"
+    i18next "^24.2.0"
     i18next-browser-languagedetector "^7.0.2"
     i18next-http-backend "^2.2.1"
     km-app "file:."
