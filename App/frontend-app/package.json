@@ -16,7 +16,7 @@
         "@azure/msal-browser": "^2.39.0",
         "@azure/msal-react": "^1.5.8",
         "@fluentai/attachments": "^0.7.1",
-        "@fluentai/react-copilot": "^0.11.0",
+        "@fluentai/react-copilot": "^0.11.3",
         "@fluentai/react-copilot-chat": "^0.5.2",
         "@fluentai/reference": "^0.8.2",
         "@fluentai/textarea": "^0.5.1",

@@ -534,7 +534,7 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.1.tgz"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
-"@fluentai/attachments@^0.7.0", "@fluentai/attachments@^0.7.1":
+"@fluentai/attachments@^0.7.1":
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@fluentai/attachments/-/attachments-0.7.1.tgz#81d027f6fdc4327f8c4a007868eef1a0deb0fd02"
   integrity sha512-54XT+46p0fjXH2TWyK2nEyjoDc3XAzT9nrK1y/I+CWIxeV396OvmEtJf0IyPheR9Iuz3WGgOEB2zQ2QdzGCeGA==
@@ -542,12 +542,12 @@
     "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/feedback-buttons@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/@fluentai/feedback-buttons/-/feedback-buttons-0.6.0.tgz"
-  integrity sha512-mtRADD00hlWvLZu0uHM1jtW5/bjM2FntT7cH9/otLQBxaCk47vIAQrTOFdudE1m/hZgNyopDkuZpF00Wc2fI0Q==
+"@fluentai/feedback-buttons@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@fluentai/feedback-buttons/-/feedback-buttons-0.6.2.tgz#220ff181651db4c55a91f36a6cdf7a078a47b7f5"
+  integrity sha512-4oJvZuXoUF15+NKHyghPoy5yKgPIrOIRTzjGW7G4uTPT3kQAMfl47hZ5AafToSeGYw+Tki7nJKsRSeKtKwJqPg==
   dependencies:
-    "@fluentai/provider" "^0.7.0"
+    "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
 "@fluentai/first-run-experience@^0.3.0":
@@ -555,14 +555,6 @@
   resolved "https://registry.npmjs.org/@fluentai/first-run-experience/-/first-run-experience-0.3.0.tgz"
   integrity sha512-A4urDTUieGDspV7eq2lt+Nw9348E76a4ZZrGlduEXx/lu0S378Wbd5ntHnxtVO1rY0z+cUyZlV4jQIzyDPrGQA==
   dependencies:
-    "@swc/helpers" "^0.5.1"
-
-"@fluentai/flair@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/@fluentai/flair/-/flair-0.3.0.tgz"
-  integrity sha512-nQg1VhjiOFDHkySp+l2ZdadG+WVHQ4/mMLw8+HoeO2hIdhq7E1I2JWABN3rO3SJnWR9W/xD8H4O/plwoR6zmPg==
-  dependencies:
-    "@fluentai/tokens" "^0.2.0"
     "@swc/helpers" "^0.5.1"
 
 "@fluentai/flair@^0.3.2":
@@ -574,15 +566,15 @@
     "@fluentui-contrib/houdini-utils" "^0.3.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/latency@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/@fluentai/latency/-/latency-0.5.0.tgz"
-  integrity sha512-eVVh7L21ecG0IDep5Nf3tPTWFhSlF0/0y9fVxbUY1jBf37C/79skZwFXdPVrhN0qImJIuebVzzKueRH6lMoawg==
+"@fluentai/latency@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@fluentai/latency/-/latency-0.5.1.tgz#756f236265f50f5d1750a994c629573ffb2d96ff"
+  integrity sha512-otHFPbADuMcmMGJqqtxZ3NRpgkXaJ4zZfFbqWGyayY9ntWYFqsK5nuExlx2khp45wPUp0fQOahBW4Y6LCi0imA==
   dependencies:
-    "@fluentai/provider" "^0.7.0"
+    "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/output-card@^0.6.0", "@fluentai/output-card@^0.6.2":
+"@fluentai/output-card@^0.6.2":
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/@fluentai/output-card/-/output-card-0.6.2.tgz#2bfc1681da7f6fae3bd7310cf19d89f3616ba2fc"
   integrity sha512-yE9JPQsq5I5QwpYKeXrxwZ1iQi/PtYTyKM+0l4na4cIebKXUKYtMtYLDbVq6hhFUvJpep8ZEvGy4Gd3feRxRKg==
@@ -592,15 +584,15 @@
     "@fluentai/tokens" "^0.2.0"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/prompt-starter@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.npmjs.org/@fluentai/prompt-starter/-/prompt-starter-0.4.0.tgz"
-  integrity sha512-k6a1Hldcd+EtanoBeiiR1CA84OBtGM3wHWlurA2/mXCvQIVvfHpHQIsXoSffRfLITAq1xyxh6/KXu1RwNs3hOQ==
+"@fluentai/prompt-starter@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@fluentai/prompt-starter/-/prompt-starter-0.4.1.tgz#00849376358b6bf16a6e41fbf6d10f8114e5f265"
+  integrity sha512-iRb+YpVmkBrzYK1yFqAgP+5F6UvVBN07S7SQ7lcR+rz3YUaC83nZmOSGVT1tNtRQNA6/FjVujiW89sRZeBh0cA==
   dependencies:
-    "@fluentai/provider" "^0.7.0"
+    "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/provider@^0.7.0", "@fluentai/provider@^0.7.1":
+"@fluentai/provider@^0.7.1":
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@fluentai/provider/-/provider-0.7.1.tgz#8d8cfb2ff7951ccdc5b6a3d0e03a57d9ec0032dc"
   integrity sha512-7f2dGnEhz2ONTogVn+iC8qhk46AbOl71x8rBOx/mceek2WXAFMBv1tfXW0PbYQt89KeyZ9/vms1QKHKGkSs2/A==
@@ -616,7 +608,7 @@
   dependencies:
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/react-copilot-chat@^0.5.0", "@fluentai/react-copilot-chat@^0.5.2":
+"@fluentai/react-copilot-chat@^0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@fluentai/react-copilot-chat/-/react-copilot-chat-0.5.2.tgz#16924903d0bb980b3a729a494b57e36d78ea46c8"
   integrity sha512-ekHxyhg+yt2YBSq5lpzprL4k0A9dvKtqtPsWqaCxWSrMRgGHSAtqDNzh6UMkPzYL0EWzLV1+V+Xdq7TcrrXp6A==
@@ -625,36 +617,28 @@
     "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/react-copilot@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@fluentai/react-copilot/-/react-copilot-0.11.0.tgz"
-  integrity sha512-APBSxN6dXXlEitrmyS0HcJASvfHGW0ihL1ypP+toziaPN6A7r4FUVk5aQRvaA0hzRFUrHDoUwPYaj2spNd7zuA==
+"@fluentai/react-copilot@^0.11.3":
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/@fluentai/react-copilot/-/react-copilot-0.11.3.tgz#b43d4188e4f40448a6e4dd2edb8cad2917dd7629"
+  integrity sha512-C9Dk4QAcOqgYMxVdBloM6Q08OMWpcKd2887xVXz5n/mBoKc3yHPCm0cBS0XJB+koZo3Vwg0ODhrZa0WdwLYZ7w==
   dependencies:
-    "@fluentai/attachments" "^0.7.0"
-    "@fluentai/feedback-buttons" "^0.6.0"
+    "@fluentai/attachments" "^0.7.1"
+    "@fluentai/feedback-buttons" "^0.6.2"
     "@fluentai/first-run-experience" "^0.3.0"
-    "@fluentai/latency" "^0.5.0"
-    "@fluentai/output-card" "^0.6.0"
-    "@fluentai/prompt-starter" "^0.4.0"
-    "@fluentai/provider" "^0.7.0"
-    "@fluentai/react-copilot-chat" "^0.5.0"
-    "@fluentai/react-flair" "^0.4.0"
+    "@fluentai/latency" "^0.5.1"
+    "@fluentai/output-card" "^0.6.2"
+    "@fluentai/prompt-starter" "^0.4.1"
+    "@fluentai/provider" "^0.7.1"
+    "@fluentai/react-copilot-chat" "^0.5.2"
+    "@fluentai/react-flair" "^0.4.2"
     "@fluentai/react-preview" "^0.2.0"
     "@fluentai/react-response-count" "^0.1.0"
-    "@fluentai/react-sensitivity-label" "^0.2.0"
+    "@fluentai/react-sensitivity-label" "^0.2.1"
     "@fluentai/react-snippet" "^0.1.0"
-    "@fluentai/reference" "^0.8.0"
-    "@fluentai/suggestions" "^0.6.0"
-    "@fluentai/textarea" "^0.5.0"
+    "@fluentai/reference" "^0.8.2"
+    "@fluentai/suggestions" "^0.6.1"
+    "@fluentai/textarea" "^0.5.1"
     "@fluentai/tokens" "^0.2.0"
-    "@swc/helpers" "^0.5.1"
-
-"@fluentai/react-flair@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.npmjs.org/@fluentai/react-flair/-/react-flair-0.4.0.tgz"
-  integrity sha512-nTM1eSVJkSEehXGbpKsZSnEcxmpjukaSr4LW2f/hoN2e09+LBU4vkN9ZdDYUebxMbfpg6TNnVW50tazBGZwUJg==
-  dependencies:
-    "@fluentai/flair" "^0.3.0"
     "@swc/helpers" "^0.5.1"
 
 "@fluentai/react-flair@^0.4.2":
@@ -680,7 +664,7 @@
   dependencies:
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/react-sensitivity-label@^0.2.0", "@fluentai/react-sensitivity-label@^0.2.1":
+"@fluentai/react-sensitivity-label@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@fluentai/react-sensitivity-label/-/react-sensitivity-label-0.2.1.tgz#78a17f3b30a948e4374c062ddda8273ef12d5f38"
   integrity sha512-/VkCqQYVK5jrRILkzPN4DW0a7qWxyPLvasycugSEftKR2dgPcrzcL4PaEJWQmBR3geqoSIiPgCTFhE+33hUTxg==
@@ -695,7 +679,7 @@
   dependencies:
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/reference@^0.8.0", "@fluentai/reference@^0.8.2":
+"@fluentai/reference@^0.8.2":
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/@fluentai/reference/-/reference-0.8.2.tgz#20a0a025930bc110734b33d3062c6abd46f216e6"
   integrity sha512-9Y47S3gty3GNrhpvYAFSvUes6QyeC+NShEwOFSHll0F+4RQYLfWKjjT32c1vo+YAv6Ss8qHyZOmbrLDilKbbAA==
@@ -705,15 +689,15 @@
     "@fluentai/react-sensitivity-label" "^0.2.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/suggestions@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/@fluentai/suggestions/-/suggestions-0.6.0.tgz"
-  integrity sha512-I+85hCKCNXzRqlXPF5aRfxEL6Ow5AajWv5zlwrkWwbiHrL23CncqZ8SMQ3suFcJi3Pt9Vgs/mQqPWXD9alQRIA==
+"@fluentai/suggestions@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@fluentai/suggestions/-/suggestions-0.6.1.tgz#1794c6a48cae424e5efa2db30d23a3cbdda53b67"
+  integrity sha512-gLsSWVUmEy75awgej1JQ/MKnEKjV48dxxtZePf+jAUrNW7pL4F4YyM5Al3yTqwi1MYwOHEELYqsChqHczwco3Q==
   dependencies:
-    "@fluentai/provider" "^0.7.0"
+    "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/textarea@^0.5.0", "@fluentai/textarea@^0.5.1":
+"@fluentai/textarea@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@fluentai/textarea/-/textarea-0.5.1.tgz#6cb52e4ac2fd56d83cad3013e70cebf88da79e4b"
   integrity sha512-l7LwKFIsVgB/Qns4yKZ+ideN3O/AZsYVBBAriDcswKtc4/3t4owOcCbpYvaWYcurWlrrQSHSZc/GDA6+WYpWsw==
@@ -6267,7 +6251,7 @@ kleur@^3.0.3:
     "@azure/msal-browser" "^2.39.0"
     "@azure/msal-react" "^1.5.8"
     "@fluentai/attachments" "^0.7.1"
-    "@fluentai/react-copilot" "^0.11.0"
+    "@fluentai/react-copilot" "^0.11.3"
     "@fluentai/react-copilot-chat" "^0.5.2"
     "@fluentai/reference" "^0.8.2"
     "@fluentai/textarea" "^0.5.1"
