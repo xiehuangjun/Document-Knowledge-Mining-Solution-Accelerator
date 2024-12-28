@@ -6143,7 +6143,7 @@ kleur@^3.0.3:
     i18next-browser-languagedetector "^7.0.2"
     i18next-http-backend "^2.2.1"
     km-app "file:."
-    marked "^14.1.0"
+    marked "^15.0.4"
     notistack "^3.0.1"
     pdfjs-dist "^4.7.76"
     react "^18.2.0"
@@ -6292,10 +6292,10 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-marked@^14.1.0:
-  version "14.1.0"
-  resolved "https://registry.npmjs.org/marked/-/marked-14.1.0.tgz"
-  integrity sha512-P93GikH/Pde0hM5TAXEd8I4JAYi8IB03n8qzW8Bh1BIEFpEyBoYxi/XWZA53LSpTeLBiMQOoSMj0u5E/tiVYTA==
+marked@^15.0.4:
+  version "15.0.4"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-15.0.4.tgz#864dbf50227b6507646c771c2ef5f0de2924833e"
+  integrity sha512-TCHvDqmb3ZJ4PWG7VEGVgtefA5/euFmsIhxtD0XsBxI39gUSKL81mIRFdt0AiNQozUahd4ke98ZdirExd/vSEw==
 
 math-intrinsics@^1.0.0:
   version "1.0.0"
