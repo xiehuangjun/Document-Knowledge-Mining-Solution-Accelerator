@@ -695,12 +695,12 @@
     "@fluentai/provider" "^0.7.0"
     "@swc/helpers" "^0.5.1"
 
-"@fluentai/textarea@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/@fluentai/textarea/-/textarea-0.5.0.tgz"
-  integrity sha512-QgmBRLR/zM78upqBqbBooYWy4KMqA70iCrmqqc8clHFWxNAhiT5I9iOW3Oqm4O4FEmihuHTsTq9a/UaU6I5o3Q==
+"@fluentai/textarea@^0.5.0", "@fluentai/textarea@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@fluentai/textarea/-/textarea-0.5.1.tgz#6cb52e4ac2fd56d83cad3013e70cebf88da79e4b"
+  integrity sha512-l7LwKFIsVgB/Qns4yKZ+ideN3O/AZsYVBBAriDcswKtc4/3t4owOcCbpYvaWYcurWlrrQSHSZc/GDA6+WYpWsw==
   dependencies:
-    "@fluentai/provider" "^0.7.0"
+    "@fluentai/provider" "^0.7.1"
     "@swc/helpers" "^0.5.1"
 
 "@fluentai/tokens@^0.2.0":
@@ -6131,7 +6131,7 @@ kleur@^3.0.3:
     "@fluentai/react-copilot" "^0.11.0"
     "@fluentai/react-copilot-chat" "^0.5.0"
     "@fluentai/reference" "^0.8.2"
-    "@fluentai/textarea" "^0.5.0"
+    "@fluentai/textarea" "^0.5.1"
     "@fluentui/react" "^8.120.9"
     "@fluentui/react-components" "^9.46.4"
     "@fluentui/react-datepicker-compat" "^0.4.59"
