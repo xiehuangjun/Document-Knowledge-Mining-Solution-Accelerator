@@ -25,7 +25,7 @@
         "@fluentui/react-datepicker-compat": "^0.4.59",
         "@fluentui/react-file-type-icons": "^8.12.7",
         "@fluentui/react-icons": "^2.0.267",
-        "@fluentui/react-tags-preview": "^0.2.10",
+        "@fluentui/react-tags-preview": "^0.4.0",
         "@microsoft/applicationinsights-react-js": "^3.4.3",
         "@microsoft/applicationinsights-web": "^3.0.2",
         "@react-pdf-viewer/core": "^3.12.0",
