@@ -47,7 +47,7 @@
         "react-router-dom": "^7.1.1",
         "react-tiff": "^0.0.11",
         "react-uploader": "^3.43.0",
-        "use-debounce": "^9.0.4"
+        "use-debounce": "^10.0.4"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^6.6.3",
