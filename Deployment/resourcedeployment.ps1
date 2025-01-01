@@ -208,6 +208,7 @@ function DisplayResult([pscustomobject]$jsonString) {
     $storageAccountName = $jsonString.properties.outputs.gs_storageaccount_name.value
     $azsearchServiceName = $jsonString.properties.outputs.gs_azsearch_name.value
     $aksName = $jsonString.properties.outputs.gs_aks_name.value
+
     $containerRegistryName = $jsonString.properties.outputs.gs_containerregistry_name.value
     $azcognitiveserviceName = $jsonString.properties.outputs.gs_azcognitiveservice_name.value
     $azopenaiServiceName = $jsonString.properties.outputs.gs_openaiservice_name.value
@@ -229,6 +230,7 @@ function DisplayResult([pscustomobject]$jsonString) {
     Write-Host "* Azure Cosmos DB " -ForegroundColor Yellow -NoNewline; Write-Host "$azcosmosDBName" -ForegroundColor Green
     Write-Host "* Azure App Configuration Endpoint " -ForegroundColor Yellow -NoNewline; Write-Host "$azappConfigEndpoint" -ForegroundColor Green
     Write-Output "rg_name=$resourcegroupName" >> $Env:GITHUB_ENV
+
     Write-Output "SOLUTION_PREFIX=$solutionPrefix" >> $Env:GITHUB_ENV
 }
 
@@ -605,6 +607,8 @@ try {
         Write-Host "Getting the Kubernetes resource group..." -ForegroundColor Cyan
         $aksResourceGroupName = $(az aks show --resource-group $deploymentResult.ResourceGroupName --name $deploymentResult.AksName --query nodeResourceGroup --output tsv)
         Write-Host "Kubernetes resource group: $aksResourceGroupName" -ForegroundColor Green
+        Write-Output "krg_name=$aksResourceGroupName" >> $Env:GITHUB_ENV
+        
     }
     catch {
         Write-Host "Failed to get the Kubernetes resource group." -ForegroundColor Red
