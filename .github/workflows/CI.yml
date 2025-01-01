@@ -40,13 +40,15 @@ jobs:
           Move-Item -Path ./helm/windows-amd64/helm.exe -Destination "C:\helm.exe"
           [Environment]::SetEnvironmentVariable('PATH', $env:PATH + ';C:\', [System.EnvironmentVariableTarget]::Machine)
 
-          
+
     - name: Set Docker environment variables
       run: echo "DOCKER_BUILDKIT=0" >> $GITHUB_ENV
-        
+
       # Set up Docker
     - name: Set up Docker
       uses: docker/setup-buildx-action@v2
+      with:
+       driver: docker
 
     - name: Setup PowerShell
       shell: pwsh
