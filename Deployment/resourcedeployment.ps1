@@ -141,8 +141,19 @@ $modelLocation = $params.modelLocation
 $email = $params.email
 
 function LoginAzure([string]$subscriptionID) {
-        Write-Host "Log in to Azure.....`r`n" -ForegroundColor Yellow
-        az login
+          Write-Host "Log in to Azure.....`r`n" -ForegroundColor Yellow
+        if ($env:CI -eq "true"){
+      
+        az login --service-principal `
+        --username $env:AZURE_CLIENT_ID `
+        --password $env:AZURE_CLIENT_SECRET `
+        --tenant $env:AZURE_TENANT_ID
+        write-host "CI deployment mode"
+        }
+        else{
+              az login
+        write-host "manual deployment mode"
+        }
         az account set --subscription $subscriptionID
         Write-Host "Switched subscription to '$subscriptionID' `r`n" -ForegroundColor Yellow
 }
@@ -192,6 +203,8 @@ function DeployAzureResources([string]$location, [string]$modelLocation) {
 
 function DisplayResult([pscustomobject]$jsonString) {
     $resourcegroupName = $jsonString.properties.outputs.gs_resourcegroup_name.value
+    $solutionPrefix = $jsonString.properties.outputs.gs_solution_prefix.value
+
     $storageAccountName = $jsonString.properties.outputs.gs_storageaccount_name.value
     $azsearchServiceName = $jsonString.properties.outputs.gs_azsearch_name.value
     $aksName = $jsonString.properties.outputs.gs_aks_name.value
@@ -215,6 +228,8 @@ function DisplayResult([pscustomobject]$jsonString) {
     Write-Host "* Azure Storage Account " -ForegroundColor Yellow -NoNewline; Write-Host "$storageAccountName" -ForegroundColor Green
     Write-Host "* Azure Cosmos DB " -ForegroundColor Yellow -NoNewline; Write-Host "$azcosmosDBName" -ForegroundColor Green
     Write-Host "* Azure App Configuration Endpoint " -ForegroundColor Yellow -NoNewline; Write-Host "$azappConfigEndpoint" -ForegroundColor Green
+    Write-Output "rg_name=$resourcegroupName" >> $Env:GITHUB_ENV
+    Write-Output "SOLUTION_PREFIX=$solutionPrefix" >> $Env:GITHUB_ENV
 }
 
 # Function to replace placeholders in a template with actual values
@@ -716,6 +731,7 @@ try {
             Write-Host "Upgrading node pool: $nodePool" -ForegroundColor Cyan
             Write-Host "Node pool $nodePool upgrade initiated." -ForegroundColor Green
             az aks nodepool upgrade --resource-group $deploymentResult.ResourceGroupName --cluster-name $deploymentResult.AksName --name $nodePool 
+            
         }
     }
     catch {
