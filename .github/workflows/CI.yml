@@ -17,22 +17,32 @@ jobs:
       uses: actions/checkout@v3  # Checks out your repository
       # Install Azure CLI
     - name: Install Azure CLI
-      run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      shell: pwsh
+      run: |
+          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
+          Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet' -Wait
 
-      # Install kubectl
+    # Install kubectl (Windows method)
     - name: Install kubectl
+      shell: pwsh
       run: |
-          sudo apt-get update
-          sudo apt-get install -y kubectl
+        Invoke-WebRequest -Uri https://dl.k8s.io/release/v1.28.0/bin/windows/amd64/kubectl.exe -OutFile kubectl.exe
+        Move-Item -Path ./kubectl.exe -Destination "C:\kubectl.exe"
+        [Environment]::SetEnvironmentVariable('PATH', $env:PATH + ';C:\', [System.EnvironmentVariableTarget]::Machine)
 
-      # Install Helm
+
+      # Install Helm (Windows method)
     - name: Install Helm
+      shell: pwsh
       run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          Invoke-WebRequest -Uri https://get.helm.sh/helm-v3.13.0-windows-amd64.zip -OutFile helm.zip
+          Expand-Archive helm.zip -DestinationPath helm
+          Move-Item -Path ./helm/windows-amd64/helm.exe -Destination "C:\helm.exe"
+          [Environment]::SetEnvironmentVariable('PATH', $env:PATH + ';C:\', [System.EnvironmentVariableTarget]::Machine)
 
       # Set up Docker
     - name: Set up Docker
-      uses: docker/setup-buildx-action@v2 
+      uses: docker/setup-buildx-action@v2
 
     - name: Setup PowerShell
       shell: pwsh
