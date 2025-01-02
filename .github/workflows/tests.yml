@@ -51,20 +51,19 @@ jobs:
               /p:CoverletOutputFormat=cobertura \
               /p:CoverletOutput=./TestResults/coverage.cobertura.xml
           fi
+      - name: Find Coverage File
+        id: coverage_path
+        run: echo "coverage_file=$(find ./TestResults -name 'coverage.cobertura.xml')" >> $GITHUB_ENV
 
       - name: Install Report Generator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
       - name: Generate Coverage Report
         run: |
-          if [ -f "./TestResults/**/coverage.cobertura.xml" ]; then
-            reportgenerator \
-              -reports:./TestResults/**/coverage.cobertura.xml \
-              -targetdir:./coverage-report \
-              -reporttypes:TextSummary
-          else
-            echo "No coverage report generated. Skipping report generation."
-          fi
+          reportgenerator \
+            -reports:${{ env.coverage_file }} \
+            -targetdir:./coverage-report \
+            -reporttypes:TextSummary
 
       - name: Display Coverage
         run: |
