@@ -53,8 +53,10 @@ jobs:
           fi
 
 
+
       - name: Generate Coverage Report
         run: |
+            dotnet tool install -g dotnet-reportgenerator-globaltool
             if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
                 reportgenerator \
                 -reports:./TestResults/**/coverage.cobertura.xml \
