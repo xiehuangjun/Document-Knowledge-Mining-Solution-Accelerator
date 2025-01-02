@@ -38,8 +38,8 @@ jobs:
             --logger "trx;LogFileName=test_results.trx" \
             --results-directory "./TestResults" \
             /p:CollectCoverage=true \
-            /p:CoverletOutputFormat=json \
-            /p:CoverletOutput=./coverage/
+            /p:CoverletOutputFormat=cobertura \
+            /p:CoverletOutput=./TestResults/coverage.cobertura.xml
 
       - name: Install Report Generator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
@@ -47,12 +47,20 @@ jobs:
       - name: Generate Coverage Report
         run: |
           reportgenerator \
-            -reports:./coverage/coverage.json \
+            -reports:./TestResults/coverage.cobertura.xml \
             -targetdir:./coverage-report \
             -reporttypes:TextSummary
 
       - name: Display Coverage
-        run: cat ./coverage-report/Summary.txt
+        run: |
+          echo "Code Coverage Summary:"
+          cat ./coverage-report/Summary.txt
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-api-coverage
+          path: ./coverage-report
 
   kernel_memory_tests:
     runs-on: ubuntu-latest
