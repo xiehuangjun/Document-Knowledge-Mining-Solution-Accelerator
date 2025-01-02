@@ -13,77 +13,45 @@ on:
       - synchronize
 
 jobs:
-  backend_api_tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-      - name: Install dependencies
-        run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
-  
-      - name: Check for test files
-        id: check-tests
-        run: |
-            if [ ! -d "App/backend-api/Microsoft.GS.DPS.Tests" ] || [ -z "$(find App/backend-api/Microsoft.GS.DPS.Tests -name '*Test*.cs')" ]; then
-              echo "No test files found."
-              echo "tests-found=false" >> $GITHUB_ENV
-            else
-              echo "Test files found."
-              echo "tests-found=true" >> $GITHUB_ENV
-            fi
-  
-      - name: Run tests with coverage
-        if: env.tests-found == 'true'
-        run: |
-            dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
-              --collect:"XPlat Code Coverage" \
-              --no-build \
-              --verbosity normal
-        env:
-            DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  
-      - name: Report coverage
-        if: env.tests-found == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-            name: code-coverage-report
-            path: '**/TestResults/**/*.coverage'
-  
-      - name: Convert coverage to lcov
-        if: env.tests-found == 'true'
-        run: |
-            dotnet tool install -g coverlet.console || echo "Coverlet already installed"
-            export PATH="$PATH:$HOME/.dotnet/tools"
-            coverlet App/backend-api/Microsoft.GS.DPS.Tests/bin/Debug/net6.0/Microsoft.GS.DPS.Tests.dll \
-              --target "dotnet" \
-              --targetargs "test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-build --nologo --blame" \
-              --output "coverage.json" --format json --threshold 80
-        env:
-            DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  
-      - name: Upload lcov report
-        if: env.tests-found == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-            name: lcov-report
-            path: coverage.json
-  
-      - name: Comment on PR with coverage
-        if: env.tests-found == 'true' && github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-            header: Coverage Report
-            message: |
-              A new test coverage report is available for this PR:
-              ```
-              $(cat coverage.json | jq '.')
-              ```
+    backend_api_tests:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
+    
+          - name: Set up .NET
+            uses: actions/setup-dotnet@v3
+            with:
+              dotnet-version: '8.0.x'
+    
+          - name: Install dependencies
+            run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
+    
+          - name: Build Test Project
+            run: dotnet build App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-restore
+    
+          - name: Check for test files
+            id: check-tests
+            run: |
+                if [ ! -d "App/backend-api/Microsoft.GS.DPS.Tests" ] || [ -z "$(find App/backend-api/Microsoft.GS.DPS.Tests -name '*Test*.cs')" ]; then
+                  echo "No test files found."
+                  echo "tests-found=false" >> $GITHUB_ENV
+                else
+                  echo "Test files found."
+                  echo "tests-found=true" >> $GITHUB_ENV
+                fi
+    
+          - name: Run tests with coverage
+            if: env.tests-found == 'true'
+            run: |
+                dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
+                  --collect:"XPlat Code Coverage" \
+                  --logger "trx;LogFileName=test_results.trx" \
+                  --results-directory "./TestResults" \
+                  --no-build \
+                  --verbosity normal
+            env:
+                DOTNET_CLI_TELEMETRY_OPTOUT: 1
   kernel_memory_tests:
     runs-on: ubuntu-latest
 
