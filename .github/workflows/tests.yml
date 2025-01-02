@@ -24,44 +24,66 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      - name: Install Code Coverage Tools
+      - name: Install dependencies
+        run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
+  
+      - name: Check for test files
+        id: check-tests
         run: |
-          dotnet tool install --global coverlet.console || echo "Warning: Could not install coverlet."
-        env:
-          DOTNET_ROOT: /usr/share/dotnet
-
-
-      - name: Restore and run tests for Backend API with coverage
-        working-directory: ./App/backend-api
-        run: |
-          if [ -f "Microsoft.GS.DPS.sln" ]; then
-            dotnet restore Microsoft.GS.DPS.sln || echo "Warning: Some dependencies are missing. Proceeding."
-            if dotnet test Microsoft.GS.DPS.sln --list-tests > /dev/null 2>&1; then
-              dotnet test Microsoft.GS.DPS.Host/BackendApi.Tests/BackendApi.Tests.csproj --collect:"XPlat Code Coverage" --settings coverlet.runsettings --logger trx --results-directory TestResults || echo "Warning: Some tests may have failed."
+            if [ ! -d "App/backend-api/Microsoft.GS.DPS.Tests" ] || [ -z "$(find App/backend-api/Microsoft.GS.DPS.Tests -name '*Test*.cs')" ]; then
+              echo "No test files found."
+              echo "tests-found=false" >> $GITHUB_ENV
             else
-              echo "No test cases found in Backend API. Skipping tests."
+              echo "Test files found."
+              echo "tests-found=true" >> $GITHUB_ENV
             fi
-          else
-            echo "No solution file found in Backend API. Skipping tests."
-          fi
-      - name: List test result files
-        run: ls -R ./App/backend-api/TestResults || echo "TestResults directory not found."
-      - name: Verify Coverage Report
+  
+      - name: Run tests with coverage
+        if: env.tests-found == 'true'
         run: |
-          if [ -d "./App/backend-api/TestResults/CoverageReport" ]; then
-              echo "Coverage report exists."
-          else
-            echo "Coverage report not generated."
-          fi
-
-
-
-      - name: Publish coverage results for Backend API
+            dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
+              --collect:"XPlat Code Coverage" \
+              --no-build \
+              --verbosity normal
+        env:
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  
+      - name: Report coverage
+        if: env.tests-found == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: backend-api-coverage
-          path: ./App/backend-api/TestResults/CoverageReport
-
+            name: code-coverage-report
+            path: '**/TestResults/**/*.coverage'
+  
+      - name: Convert coverage to lcov
+        if: env.tests-found == 'true'
+        run: |
+            dotnet tool install -g coverlet.console || echo "Coverlet already installed"
+            export PATH="$PATH:$HOME/.dotnet/tools"
+            coverlet App/backend-api/Microsoft.GS.DPS.Tests/bin/Debug/net6.0/Microsoft.GS.DPS.Tests.dll \
+              --target "dotnet" \
+              --targetargs "test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-build --nologo --blame" \
+              --output "coverage.json" --format json --threshold 80
+        env:
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  
+      - name: Upload lcov report
+        if: env.tests-found == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+            name: lcov-report
+            path: coverage.json
+  
+      - name: Comment on PR with coverage
+        if: env.tests-found == 'true' && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+            header: Coverage Report
+            message: |
+              A new test coverage report is available for this PR:
+              ```
+              $(cat coverage.json | jq '.')
+              ```
   kernel_memory_tests:
     runs-on: ubuntu-latest
 
