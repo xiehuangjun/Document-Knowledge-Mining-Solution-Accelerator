@@ -60,10 +60,12 @@ jobs:
 
       - name: Generate Coverage Report
         run: |
-          reportgenerator \
-            -reports:${{ env.coverage_file }} \
-            -targetdir:./coverage-report \
-            -reporttypes:TextSummary
+            if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
+                reportgenerator \
+                -reports:${{ env.coverage_file }} \
+                -targetdir:./coverage-report \
+                -reporttypes:TextSummary
+            fi
 
       - name: Display Coverage
         run: |
