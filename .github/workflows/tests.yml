@@ -2,10 +2,11 @@ name: Unit Tests - DKM
 
 on:
   push:
-    branches: main
-    
+    branches:
+      - main
   pull_request:
-    branches: main
+    branches:
+      - main
     types:
       - opened
       - ready_for_review
@@ -13,48 +14,48 @@ on:
       - synchronize
 
 jobs:
-    backend_api_tests:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v3
-    
-          - name: Set up .NET
-            uses: actions/setup-dotnet@v3
-            with:
-              dotnet-version: '8.0.x'
-    
-          - name: Install dependencies
-            run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
-    
-          - name: Build Test Project
-            run: dotnet build App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-restore
-    
-          - name: Check for test files
-            id: check-tests
-            run: |
-                if [ ! -d "App/backend-api/Microsoft.GS.DPS.Tests" ] || [ -z "$(find App/backend-api/Microsoft.GS.DPS.Tests -name '*Test*.cs')" ]; then
-                  echo "No test files found."
-                  echo "tests-found=false" >> $GITHUB_ENV
-                else
-                  echo "Test files found."
-                  echo "tests-found=true" >> $GITHUB_ENV
-                fi
-    
-          - name: Run tests with coverage
-            if: env.tests-found == 'true'
-            run: |
-                dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
-                  --collect:"XPlat Code Coverage" \
-                  --logger "trx;LogFileName=test_results.trx" \
-                  --results-directory "./TestResults" \
-                  --no-build \
-                  --verbosity normal
-            env:
-                DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  backend_api_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install dependencies
+        run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
+
+      - name: Build Test Project
+        run: dotnet build App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-restore
+
+      - name: Check for test files
+        id: check-tests
+        run: |
+          if [ ! -d "App/backend-api/Microsoft.GS.DPS.Tests" ] || [ -z "$(find App/backend-api/Microsoft.GS.DPS.Tests -name '*Test*.cs')" ]; then
+            echo "No test files found."
+            echo "tests-found=false" >> $GITHUB_ENV
+          else
+            echo "Test files found."
+            echo "tests-found=true" >> $GITHUB_ENV
+          fi
+
+      - name: Run tests with coverage
+        if: env.tests-found == 'true'
+        run: |
+          dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
+            --collect:"XPlat Code Coverage" \
+            --logger "trx;LogFileName=test_results.trx" \
+            --results-directory "./TestResults" \
+            --no-build \
+            --verbosity normal
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
   kernel_memory_tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -86,7 +87,6 @@ jobs:
 
   frontend_tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
