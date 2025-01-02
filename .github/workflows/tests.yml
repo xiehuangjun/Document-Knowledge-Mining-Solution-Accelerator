@@ -51,18 +51,13 @@ jobs:
               /p:CoverletOutputFormat=cobertura \
               /p:CoverletOutput=./TestResults/coverage.cobertura.xml
           fi
-      - name: Find Coverage File
-        id: coverage_path
-        run: echo "coverage_file=$(find ./TestResults -name 'coverage.cobertura.xml')" >> $GITHUB_ENV
 
-      - name: Install Report Generator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
       - name: Generate Coverage Report
         run: |
             if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
                 reportgenerator \
-                -reports:${{ env.coverage_file }} \
+                -reports:./TestResults/**/coverage.cobertura.xml \ \
                 -targetdir:./coverage-report \
                 -reporttypes:TextSummary
             fi
