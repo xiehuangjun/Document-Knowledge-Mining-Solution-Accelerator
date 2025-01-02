@@ -47,7 +47,7 @@ jobs:
       - name: Generate Coverage Report
         run: |
           reportgenerator \
-            -reports:./TestResults/coverage.cobertura.xml \
+            -reports:./TestResults/**/coverage.cobertura.xml \
             -targetdir:./coverage-report \
             -reporttypes:TextSummary
 
