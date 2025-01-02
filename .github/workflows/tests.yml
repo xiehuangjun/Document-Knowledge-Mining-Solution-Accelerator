@@ -57,7 +57,7 @@ jobs:
         run: |
             if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
                 reportgenerator \
-                -reports:./TestResults/**/coverage.cobertura.xml \ \
+                -reports:./TestResults/**/coverage.cobertura.xml \
                 -targetdir:./coverage-report \
                 -reporttypes:TextSummary
             fi
