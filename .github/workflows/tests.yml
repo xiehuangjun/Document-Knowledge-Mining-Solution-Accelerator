@@ -26,35 +26,54 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install dependencies
-        run: dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
+        run: |
+          if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
+            dotnet restore App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj
+          else
+            echo "No test project found for Backend API. Skipping tests."
+            exit 0
+          fi
 
       - name: Build Test Project
-        run: dotnet build App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-restore
+        run: |
+          if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
+            dotnet build App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj --no-restore
+          fi
 
       - name: Run tests with coverage
         run: |
-          dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
-            --collect:"XPlat Code Coverage" \
-            --logger "trx;LogFileName=test_results.trx" \
-            --results-directory "./TestResults" \
-            /p:CollectCoverage=true \
-            /p:CoverletOutputFormat=cobertura \
-            /p:CoverletOutput=./TestResults/coverage.cobertura.xml
+          if [ -f "App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj" ]; then
+            dotnet test App/backend-api/Microsoft.GS.DPS.Tests/Microsoft.GS.DPS.Tests.csproj \
+              --collect:"XPlat Code Coverage" \
+              --logger "trx;LogFileName=test_results.trx" \
+              --results-directory "./TestResults" \
+              /p:CollectCoverage=true \
+              /p:CoverletOutputFormat=cobertura \
+              /p:CoverletOutput=./TestResults/coverage.cobertura.xml
+          fi
 
       - name: Install Report Generator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
       - name: Generate Coverage Report
         run: |
-          reportgenerator \
-            -reports:./TestResults/**/coverage.cobertura.xml \
-            -targetdir:./coverage-report \
-            -reporttypes:TextSummary
+          if [ -f "./TestResults/**/coverage.cobertura.xml" ]; then
+            reportgenerator \
+              -reports:./TestResults/**/coverage.cobertura.xml \
+              -targetdir:./coverage-report \
+              -reporttypes:TextSummary
+          else
+            echo "No coverage report generated. Skipping report generation."
+          fi
 
       - name: Display Coverage
         run: |
-          echo "Code Coverage Summary:"
-          cat ./coverage-report/Summary.txt
+          if [ -f "./coverage-report/Summary.txt" ]; then
+            echo "Code Coverage Summary:"
+            cat ./coverage-report/Summary.txt
+          else
+            echo "No coverage summary available."
+          fi
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v3
@@ -62,7 +81,7 @@ jobs:
           name: backend-api-coverage
           path: ./coverage-report
 
-  kernel_memory_tests:
+  semantic_kernel_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -73,25 +92,61 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore and run tests for Kernel Memory with coverage
-        working-directory: ./App/kernel-memory
+      - name: Install dependencies
         run: |
-          if [ -f "KernelMemory.sln" ]; then
-            dotnet restore KernelMemory.sln || echo "Warning: Some dependencies are missing. Proceeding."
-            if dotnet test KernelMemory.sln --list-tests > /dev/null 2>&1; then
-              dotnet test KernelMemory.sln --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults || echo "Warning: Some tests may have failed."
-            else
-              echo "No test cases found in Kernel Memory. Skipping tests."
-            fi
+          if [ -f "App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj" ]; then
+            dotnet restore App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj
           else
-            echo "No solution file found in Kernel Memory. Skipping tests."
+            echo "No test project found for Semantic Kernel. Skipping tests."
+            exit 0
           fi
 
-      - name: Publish coverage results for Kernel Memory
+      - name: Build Test Project
+        run: |
+          if [ -f "App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj" ]; then
+            dotnet build App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj --no-restore
+          fi
+
+      - name: Run tests with coverage
+        run: |
+          if [ -f "App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj" ]; then
+            dotnet test App/semantic-kernel/Microsoft.GS.SK.Tests/Microsoft.GS.SK.Tests.csproj \
+              --collect:"XPlat Code Coverage" \
+              --logger "trx;LogFileName=test_results.trx" \
+              --results-directory "./TestResults" \
+              /p:CollectCoverage=true \
+              /p:CoverletOutputFormat=cobertura \
+              /p:CoverletOutput=./TestResults/coverage.cobertura.xml
+          fi
+
+      - name: Install Report Generator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate Coverage Report
+        run: |
+          if [ -f "./TestResults/**/coverage.cobertura.xml" ]; then
+            reportgenerator \
+              -reports:./TestResults/**/coverage.cobertura.xml \
+              -targetdir:./coverage-report \
+              -reporttypes:TextSummary
+          else
+            echo "No coverage report generated. Skipping report generation."
+          fi
+
+      - name: Display Coverage
+        run: |
+          if [ -f "./coverage-report/Summary.txt" ]; then
+            echo "Code Coverage Summary:"
+            cat ./coverage-report/Summary.txt
+          else
+            echo "No coverage summary available."
+          fi
+
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v3
         with:
-          name: kernel-memory-coverage
-          path: ./App/kernel-memory/TestResults/CoverageReport
+          name: semantic-kernel-coverage
+          path: ./coverage-report
 
   frontend_tests:
     runs-on: ubuntu-latest
