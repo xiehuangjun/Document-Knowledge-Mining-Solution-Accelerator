@@ -25,9 +25,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    
-    - name: Install libssl-dev
-      run: sudo apt-get install -y libssl-dev
 
     - name: Install dependencies
       run: |
@@ -37,7 +34,9 @@ jobs:
           libicu-dev \
           ca-certificates \
           openssl \
-          curl
+          curl \
+          pkg-config \
+          zlib1g-dev
 
     - name: Check OpenSSL installation
       run: |
@@ -54,6 +53,14 @@ jobs:
 
     - name: Display dotnet version
       run: dotnet --version
+
+    - name: Manually Set LD_LIBRARY_PATH
+      run: |
+        echo "/usr/lib/ssl" >> $GITHUB_ENV
+        export LD_LIBRARY_PATH=/usr/lib/ssl:$LD_LIBRARY_PATH
+
+    - name: Run dotnet restore with verbose logging
+      run: dotnet restore --verbosity detailed
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
