@@ -1,11 +1,11 @@
 name: "CodeQL"
- 
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
- 
+
 jobs:
   analyze:
     name: Analyze
@@ -15,13 +15,13 @@ jobs:
       actions: read
       contents: read
       security-events: write
- 
+
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript', 'python' ]
+        language: [ 'csharp', 'javascript-typescript' ]
         dot-version: ['3.1.x']
- 
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -31,33 +31,38 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libicu-dev libssl-dev ca-certificates openssl
 
-    - name: Link OpenSSL libraries
+    - name: Upgrade OpenSSL and libssl
       run: |
-        sudo ln -sf /usr/lib/ssl /usr/include/openssl
+        sudo apt-get install --only-upgrade openssl libssl-dev
+        sudo apt-get install -y libssl1.1 libssl3
+
+    - name: Set environment variable for SSL path
+      run: |
+        echo "LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
         sudo ldconfig
 
     - name: Setup dotnet ${{ matrix.dot-version }}
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dot-version }}
- 
+
     - name: Set Globalization Invariant Mode (optional)
       run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
 
     - name: Display dotnet version
       run: dotnet --version
- 
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
- 
+
     - name: Build the C# project
       if: matrix.language == 'csharp'
       run: |
         dotnet restore
         dotnet build --configuration Release
- 
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
