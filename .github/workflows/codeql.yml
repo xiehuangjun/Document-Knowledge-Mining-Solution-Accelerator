@@ -29,7 +29,12 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libicu-dev libssl-dev ca-certificates openssl
+        sudo apt-get install -y \
+          libssl-dev \
+          libicu-dev \
+          ca-certificates \
+          openssl \
+          curl
 
     - name: Set System.Globalization.Invariant to true
       run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
