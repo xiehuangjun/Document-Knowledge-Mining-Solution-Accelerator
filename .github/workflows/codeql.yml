@@ -1,40 +1,62 @@
-name: CodeQL
+name: "CodeQL"
 
 on:
   push:
-    branches: 
-      - main  # Specify your target branch for analysis (main or master)
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  analysis:
-    runs-on: ubuntu-latest  # You can also use other OS types, like 'windows-latest' or 'macos-latest'
+  analyze:
+    name: Analyze
+    runs-on: ${{ matrix.language == 'swift' && 'macos-latest' || 'ubuntu-latest' }}
+    timeout-minutes: ${{ matrix.language == 'swift' && 120 || 360 }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp', 'javascript-typescript' ]
+        dot-version: ['8.0']
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0'  # Specify the version of .NET Core you are using
+    - name: Install libssl-dev
+      run: sudo apt-get install -y libssl-dev
 
     - name: Install dependencies
       run: |
-        dotnet restore  # Restore the NuGet packages
+        sudo apt-get update
+        sudo apt-get install -y libicu-dev libssl-dev ca-certificates openssl
 
-    - name: Build project
-      run: |
-        dotnet build --configuration Release --no-restore  # Build the project without restoring dependencies again
+    - name: Set System.Globalization.Invariant to true
+      run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
+
+    - name: Setup dotnet ${{ matrix.dot-version }}
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ matrix.dot-version }}
+
+    - name: Display dotnet version
+      run: dotnet --version
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: 'csharp'  # Specify 'csharp' for .NET Core
+        languages: ${{ matrix.language }}
+
+    - name: Build the C# project
+      if: matrix.language == 'csharp'
+      run: |
+        dotnet restore
+        dotnet build --configuration Release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: 'security'
+        category: "/language:${{matrix.language}}"
