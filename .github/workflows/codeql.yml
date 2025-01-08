@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript', ]
+        language: [ 'csharp', 'javascript-typescript', 'python' ]
         dot-version: ['3.1.x']
 
     steps:
@@ -39,10 +39,11 @@ jobs:
           pkg-config \
           zlib1g-dev
 
-    - name: Check OpenSSL installation
+    - name: Verify OpenSSL Installation
       run: |
         openssl version
         ldconfig -p | grep libssl
+        ls /usr/lib/x86_64-linux-gnu | grep libssl
 
     - name: Set System.Globalization.Invariant to true
       run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
@@ -57,7 +58,7 @@ jobs:
 
     - name: Locate libssl and Set LD_LIBRARY_PATH
       run: |
-        LIBSSL_PATH=$(find /usr/lib /lib -name "libssl.so*" | head -n 1)
+        LIBSSL_PATH=$(find /usr/lib /lib /usr/local/lib -name "libssl.so*" | head -n 1)
         echo "LIBSSL_PATH=$LIBSSL_PATH"
         if [ -z "$LIBSSL_PATH" ]; then
           echo "libssl not found"
