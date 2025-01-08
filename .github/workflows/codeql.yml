@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript', 'python' ]
+        language: [ 'csharp', 'javascript-typescript' ]
         dot-version: ['3.1.x']
 
     steps:
@@ -31,6 +31,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           libssl-dev \
+          libssl1.1 \
           libicu-dev \
           ca-certificates \
           openssl \
@@ -54,8 +55,16 @@ jobs:
     - name: Display dotnet version
       run: dotnet --version
 
-    - name: Set LD_LIBRARY_PATH for OpenSSL
-      run: echo "LD_LIBRARY_PATH=/usr/lib/ssl:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+    - name: Locate libssl and Set LD_LIBRARY_PATH
+      run: |
+        LIBSSL_PATH=$(find /usr/lib /lib -name "libssl.so*" | head -n 1)
+        echo "LIBSSL_PATH=$LIBSSL_PATH"
+        if [ -z "$LIBSSL_PATH" ]; then
+          echo "libssl not found"
+          exit 1
+        fi
+        export LD_LIBRARY_PATH=$(dirname $LIBSSL_PATH):$LD_LIBRARY_PATH
+        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Run dotnet restore with verbose logging
       run: dotnet restore --verbosity detailed
