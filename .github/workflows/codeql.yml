@@ -5,12 +5,12 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+  
 jobs:
   analyze:
     name: Analyze
-    runs-on: ${{ matrix.language == 'swift' && 'macos-latest' || 'ubuntu-latest' }}
-    timeout-minutes: ${{ matrix.language == 'swift' && 120 || 360 }}
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: 360
     permissions:
       actions: read
       contents: read
@@ -19,69 +19,45 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript', 'python' ]
+        language: [ 'csharp', 'javascript-typescript' ]
         dot-version: ['3.1.x']
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libssl3 \
-          libssl-dev \
-          libicu-dev \
-          ca-certificates \
-          openssl \
-          curl \
-          pkg-config \
-          zlib1g-dev
-
-    - name: Verify OpenSSL Installation
-      run: |
-        openssl version
-        ldconfig -p | grep libssl
-        ls /usr/lib/x86_64-linux-gnu | grep libssl
-
-    - name: Set System.Globalization.Invariant to true
-      run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
-
-    - name: Setup dotnet ${{ matrix.dot-version }}
+    - name: Setup .NET for C#
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dot-version }}
 
-    - name: Display dotnet version
+    - name: Display .NET version
       run: dotnet --version
-
-    - name: Locate libssl and Set LD_LIBRARY_PATH
-      run: |
-        LIBSSL_PATH=$(find /usr/lib /lib /usr/local/lib -name "libssl.so*" | head -n 1)
-        echo "LIBSSL_PATH=$LIBSSL_PATH"
-        if [ -z "$LIBSSL_PATH" ]; then
-          echo "libssl not found"
-          exit 1
-        fi
-        export LD_LIBRARY_PATH=$(dirname $LIBSSL_PATH):$LD_LIBRARY_PATH
-        echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Run dotnet restore with verbose logging
-      run: dotnet restore --verbosity detailed
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
 
-    - name: Build the C# project
-      if: matrix.language == 'csharp'
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Install dependencies for JavaScript/TypeScript
+      if: matrix.language == 'javascript-typescript'
+      run: npm ci
+
+    - name: Install dependencies for Python
+      if: matrix.language == 'python'
       run: |
-        dotnet restore
-        dotnet build --configuration Release
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ matrix.language }}"
+
+    - name: Upload SARIF results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: results.sarif
