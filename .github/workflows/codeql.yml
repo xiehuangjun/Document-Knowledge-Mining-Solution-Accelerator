@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript' ]
+        language: [ 'csharp', 'javascript-typescript', 'python' ]
         dot-version: ['3.1.x']
 
     steps:
@@ -54,10 +54,8 @@ jobs:
     - name: Display dotnet version
       run: dotnet --version
 
-    - name: Manually Set LD_LIBRARY_PATH
-      run: |
-        echo "/usr/lib/ssl" >> $GITHUB_ENV
-        export LD_LIBRARY_PATH=/usr/lib/ssl:$LD_LIBRARY_PATH
+    - name: Set LD_LIBRARY_PATH for OpenSSL
+      run: echo "LD_LIBRARY_PATH=/usr/lib/ssl:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Run dotnet restore with verbose logging
       run: dotnet restore --verbosity detailed
