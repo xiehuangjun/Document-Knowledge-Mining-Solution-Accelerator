@@ -19,18 +19,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript']
+        language: [ 'csharp', 'javascript-typescript', 'python' ]
         dot-version: ['3.1.x']
  
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
- 
+
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libicu-dev libssl-dev ca-certificates
- 
+        sudo apt-get install -y libicu-dev libssl-dev ca-certificates openssl
+
+    - name: Link OpenSSL libraries
+      run: |
+        sudo ln -sf /usr/lib/ssl /usr/include/openssl
+        sudo ldconfig
+
     - name: Setup dotnet ${{ matrix.dot-version }}
       uses: actions/setup-dotnet@v3
       with:
