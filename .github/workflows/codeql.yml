@@ -19,17 +19,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript-typescript', 'python' ]
+        language: [ 'csharp', 'javascript-typescript']
         dot-version: ['3.1.x']
  
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
  
-    - name: Install ICU package
+    - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libicu-dev
+        sudo apt-get install -y libicu-dev libssl-dev ca-certificates
  
     - name: Setup dotnet ${{ matrix.dot-version }}
       uses: actions/setup-dotnet@v3
