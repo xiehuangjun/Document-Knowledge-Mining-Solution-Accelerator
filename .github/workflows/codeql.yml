@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', ]
+        language: [ 'csharp', 'javascript-typescript' ]
         dot-version: ['3.1.x']
 
     steps:
@@ -35,6 +35,11 @@ jobs:
           ca-certificates \
           openssl \
           curl
+
+    - name: Check OpenSSL installation
+      run: |
+        openssl version
+        ldconfig -p | grep libssl
 
     - name: Set System.Globalization.Invariant to true
       run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
