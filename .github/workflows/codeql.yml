@@ -53,8 +53,16 @@ jobs:
     - name: Build the C# project
       if: matrix.language == 'csharp'
       run: |
-        dotnet restore
-        dotnet build --configuration Release
+        # Find the solution or project file and build it
+        solution_file=$(find . -name "*.sln" -print -quit)
+        if [ -z "$solution_file" ]; then
+          project_file=$(find . -name "*.csproj" -print -quit)
+          dotnet restore $project_file
+          dotnet build --configuration Release $project_file
+        else
+          dotnet restore $solution_file
+          dotnet build --configuration Release $solution_file
+        fi
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
