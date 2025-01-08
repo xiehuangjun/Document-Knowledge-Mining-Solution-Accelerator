@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'csharp', 'javascript-typescript', 'python' ]
-        dot-version: ['3.1.x']
+        dot-version: ['4.1.x']
 
     steps:
     - name: Checkout repository
