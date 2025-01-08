@@ -30,8 +30,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          libssl-dev \
           libssl3 \
+          libssl-dev \
           libicu-dev \
           ca-certificates \
           openssl \
