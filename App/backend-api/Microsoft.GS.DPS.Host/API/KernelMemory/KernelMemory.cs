@@ -1,4 +1,4 @@
-using Microsoft.GS.DPSHost.AppConfiguration;
+﻿using Microsoft.GS.DPSHost.AppConfiguration;
 using Microsoft.Extensions.Options;
 using Microsoft.KernelMemory;
 using Microsoft.Net.Http.Headers;
