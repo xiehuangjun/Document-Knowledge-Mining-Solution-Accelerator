@@ -176,6 +176,7 @@ function DeployAzureResources([string]$location, [string]$modelLocation) {
         if ($LASTEXITCODE -ne 0) {
             Write-Host "There might be something wrong with your deployment." -ForegroundColor Red
             Write-Host $whatIfResult -ForegroundColor Red
+            failureBanner
             exit 1            
         }
         # Proceed with the actual deployment
@@ -185,6 +186,7 @@ function DeployAzureResources([string]$location, [string]$modelLocation) {
         if ($LASTEXITCODE -ne 0) {
             Write-Host "Deployment failed. Stopping execution." -ForegroundColor Red
             Write-Host $deploymentResult -ForegroundColor Red
+            failureBanner
             exit 1
         }
 
@@ -197,6 +199,7 @@ function DeployAzureResources([string]$location, [string]$modelLocation) {
         Write-Host $_.Exception.Message -ForegroundColor Red
         Write-Host $_.InvocationInfo.PositionMessage -ForegroundColor Red
         Write-Host $_.ScriptStackTrace -ForegroundColor Red
+        failureBanner
         exit 1
     }
 }
@@ -410,6 +413,7 @@ function Check-Docker {
 # Check if Docker is running before proceeding
 if (-not (Check-Docker)) {
     Write-Host "Docker is not running. Please start Docker and try again." -ForegroundColor Red
+    failureBanner
     exit 1
 }
 
@@ -439,6 +443,9 @@ try {
     # Step 2 : Get Secrets from Azure resources
     Show-Banner -Title "Step 2 : Get Secrets from Azure resources"
     ###############################################################
+    # Validate if the Storage Account Name is empty or null    
+    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.StorageAccountName -variableName "Storage Account Name"
+
     # Get the storage account key
     $storageAccountKey = az storage account keys list --account-name $deploymentResult.StorageAccountName --resource-group $deploymentResult.ResourceGroupName --query "[0].value" -o tsv
     
@@ -596,6 +603,7 @@ try {
 
     if ($retryCount -eq $maxRetries) {
         Write-Host "Max retries reached. Failed to update the AKS cluster." -ForegroundColor Red
+        failureBanner
         exit 1
     }
     
@@ -615,6 +623,7 @@ try {
         Write-Host "Error details:" -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor Red
+        failureBanner
         exit 1
     }
 
@@ -630,6 +639,7 @@ try {
         Write-Host "Error details:" -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor Red
+        failureBanner
         exit 1
     }
     
@@ -650,6 +660,7 @@ try {
         Write-Host "Error details:" -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor Red
+        failureBanner
         exit 1
     }
     
@@ -716,6 +727,9 @@ try {
     # Validate if System Assigned Identity is null or empty
     ValidateVariableIsNullOrEmpty -variableValue $systemAssignedIdentity -variableName "System-assigned managed identity"    
     
+     # Validate if ResourceGroupId is null or empty
+    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.ResourceGroupId -variableName "ResourceGroupId"    
+ 
     # Assign the role for aks system assigned managed identity to App Configuration Data Reader role with the scope of Resourcegroup
     az role assignment create --assignee $systemAssignedIdentity --role "App Configuration Data Reader" --scope $deploymentResult.ResourceGroupId
 
@@ -743,6 +757,7 @@ try {
         Write-Host "Error details:" -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
         Write-Host $_.Exception.StackTrace -ForegroundColor Red
+        failureBanner
         exit 1
     }
 
@@ -772,6 +787,9 @@ try {
 
 
     # 5.3 Update deploy.deployment.yaml.template file and save as deploy.deployment.yaml
+    # Validate AzContainerRegistryName IsNull Or Empty.
+    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.AzContainerRegistryName -variableName "Azure Container Registry Name"
+
     ## Define Image Tags
     $acrNamespace = "kmgs"
     $acrAIServiceTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/aiservice"
@@ -821,8 +839,9 @@ try {
 
 
 #======================================================================================================================================================================
+    # Validate AzAppConfigEndpoint IsNull Or Empty.
+    ValidateVariableIsNullOrEmpty -variableValue $deploymentResult.AzAppConfigEndpoint -variableName "Azure App Configuration Endpoint"
     # App Deployment after finishing the AKS infrastructure setup
-    
     $appConfigServicePlaceholders = @{
         '{{ appconfig-url }}' = $deploymentResult.AzAppConfigEndpoint
     }
