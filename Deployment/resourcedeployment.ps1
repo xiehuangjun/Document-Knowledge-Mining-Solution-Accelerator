@@ -182,7 +182,8 @@ function DeployAzureResources([string]$location, [string]$modelLocation) {
         # Proceed with the actual deployment
         Write-Host "Proceeding with Deployment..." -ForegroundColor Yellow
         $deploymentResult = az deployment sub create --template-file .\main.bicep --location $location --name $deploymentName --parameters modeldatacenter=$modelLocation
-
+        # Check if deploymentResult is valid        
+        ValidateVariableIsNullOrEmpty -variableValue $deploymentResult -variableName "Deployment Result"  
         if ($LASTEXITCODE -ne 0) {
             Write-Host "Deployment failed. Stopping execution." -ForegroundColor Red
             Write-Host $deploymentResult -ForegroundColor Red
@@ -795,7 +796,13 @@ try {
     $acrAIServiceTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/aiservice"
     $acrKernelMemoryTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/kernelmemory"
     $acrFrontAppTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/frontapp"
-
+    
+    # Validate AI Service Tag IsNull Or Empty.    
+    ValidateVariableIsNullOrEmpty -variableValue $acrAIServiceTag -variableName "AI Service Tag"
+    # Validate Kernel Memory Tag IsNull Or Empty.   
+    ValidateVariableIsNullOrEmpty -variableValue $acrKernelMemoryTag -variableName "Kernel Memory Tag"
+    # Validate Front App Tag IsNull Or Empty.   
+    ValidateVariableIsNullOrEmpty -variableValue $acrFrontAppTag -variableName "Front App Tag"
 
     $deploymentTemplatePlaceholders = @{
         '{{ aiservice-imagepath }}' = $acrAIServiceTag
