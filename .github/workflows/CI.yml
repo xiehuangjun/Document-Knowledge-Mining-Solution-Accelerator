@@ -1,5 +1,4 @@
-name: Deploy Resources
-
+name: Validate Deployment
 on:
   push:
     branches:
@@ -7,7 +6,7 @@ on:
       - dev
       - demo
   schedule:
-    - cron: '0 6,18 * * *'  # Runs at 6:00 AM and 6:00 PM GMT
+    - cron: '0 10,22 * * *'  # Runs at 10:00 AM and 10:00 PM GMT
  
 
 jobs:
