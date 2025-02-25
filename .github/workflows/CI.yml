@@ -56,6 +56,67 @@ jobs:
       run: |
         $PSVersionTable.PSVersion
 
+    # Run Quota Check Script
+    - name: Run Quota Check
+      id: quota-check
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = "Stop"  # Ensure that any error stops the pipeline
+        
+        # Path to the PowerShell script for quota check
+        $quotaCheckScript = "Deployment/checkquota.ps1"
+    
+        # Check if the script exists and is executable (not needed for PowerShell like chmod)
+        if (-not (Test-Path $quotaCheckScript)) {
+          Write-Host "❌ Error: Quota check script not found."
+          exit 1
+        }
+    
+        # Run the script
+        .\Deployment\checkquota.ps1
+    
+        # If the script fails, check for the failure message
+        $quotaFailedMessage = "No region with sufficient quota found"
+        $output = Get-Content "Deployment/checkquota.ps1"
+    
+        if ($output -contains $quotaFailedMessage) {
+          echo "QUOTA_FAILED=true" >> $GITHUB_ENV
+        }
+      env:
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        GPT_MIN_CAPACITY: '130'
+        TEXT_EMBEDDING_MIN_CAPACITY: '80'
+  
+
+    # Send Notification on Quota Failure
+    - name: Send Notification on Quota Failure
+      if: env.QUOTA_FAILED == 'true'
+      shell: pwsh
+      run: |
+        $RUN_URL = "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+        # Construct the email body
+        $EMAIL_BODY = @"
+        {
+          "body": "<p>Dear Team,</p><p>The quota check has failed, and the pipeline cannot proceed.</p><p><strong>Build URL:</strong> $RUN_URL</p><p>Please take necessary action.</p><p>Best regards,<br>Your Automation Team</p>"
+        }
+        "@
+
+        # Send the notification
+        try {
+          $response = Invoke-RestMethod -Uri "${{ secrets.LOGIC_APP_URL }}" -Method Post -ContentType "application/json" -Body $EMAIL_BODY
+          Write-Host "Notification sent successfully."
+        } catch {
+          Write-Host "❌ Failed to send notification."
+        }
+
+    - name: Fail Pipeline if Quota Check Fails
+      if: env.QUOTA_FAILED == 'true'
+      run: exit 1
+
     - name: Run Deployment Script with Input
       shell: pwsh
       run: |
@@ -63,7 +124,7 @@ jobs:
         $input = @"
         ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         CanadaCentral
-        WestUS3
+        ${{ env.VALID_REGION }}
         ${{ secrets.EMAIL }}
         yes
         "@
@@ -136,8 +197,8 @@ jobs:
                   Write-Host "Purging CognitiveService Account: $cognitiveservice_name"
           
                   # Construct resource IDs
-                  $openaiResourceId = "/subscriptions/$subscriptionId/providers/Microsoft.CognitiveServices/locations/westus3/resourceGroups/$resourceGroupName/deletedAccounts/$openai_name"
-                  $cognitiveResourceId = "/subscriptions/$subscriptionId/providers/Microsoft.CognitiveServices/locations/eastus/resourceGroups/$resourceGroupName/deletedAccounts/$cognitiveservice_name"
+                  $openaiResourceId = "/subscriptions/$subscriptionId/providers/Microsoft.CognitiveServices/locations/${{ env.VALID_REGION }}/resourceGroups/$resourceGroupName/deletedAccounts/$openai_name"
+                  $cognitiveResourceId = "/subscriptions/$subscriptionId/providers/Microsoft.CognitiveServices/locations/${{ env.VALID_REGION }}/resourceGroups/$resourceGroupName/deletedAccounts/$cognitiveservice_name"
           
                   # Debug: Print constructed resource IDs
                   Write-Host "Command to purge OpenAI resource: az resource delete --ids `"$openaiResourceId`" --verbose"
