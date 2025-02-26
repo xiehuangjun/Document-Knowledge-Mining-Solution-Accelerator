@@ -1,5 +1,9 @@
 # List of Azure regions to check for quota (update as needed)
-$REGIONS = @("WestUS3", "CanadaCentral", "eastus")
+$AZURE_REGIONS = "$env:AZURE_REGIONS"
+# Ensure regions are correctly split and trimmed
+$REGIONS = ($AZURE_REGIONS -split '[,\s]') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+
+Write-Output "📍 Processed Regions: $($REGIONS -join ', ')"
 
 $SUBSCRIPTION_ID = $env:AZURE_SUBSCRIPTION_ID
 $GPT_MIN_CAPACITY = $env:GPT_MIN_CAPACITY
@@ -62,10 +66,7 @@ foreach ($REGION in $REGIONS) {
 
     foreach ($MODEL in $MIN_CAPACITY.Keys) {
 
-        $MODEL_INFO = $QUOTA_INFO | Where-Object { $_.Name -eq $MODEL }
-
-        Write-Host "MODEL_INFO ID: $MODEL_INFO"
-        Write-Host "QUOTA_INFO: $QUOTA_INFO"    
+        $MODEL_INFO = $QUOTA_INFO | Where-Object { $_.Name -eq $MODEL }  
         
         if (-not $MODEL_INFO) {
             Write-Host "⚠️ WARNING: No quota information found for model: $MODEL in $REGION. Skipping."
