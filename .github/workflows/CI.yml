@@ -89,6 +89,7 @@ jobs:
         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         GPT_MIN_CAPACITY: '10'
         TEXT_EMBEDDING_MIN_CAPACITY: '10'
+        AZURE_REGIONS: "${{ vars.AZURE_REGIONS }}"
   
 
     # Send Notification on Quota Failure

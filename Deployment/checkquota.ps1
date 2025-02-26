@@ -1,5 +1,9 @@
 # List of Azure regions to check for quota (update as needed)
-$REGIONS = @("WestUS3", "CanadaCentral", "eastus")
+$AZURE_REGIONS = "$env:AZURE_REGIONS"
+# Ensure regions are correctly split and trimmed
+$REGIONS = ($AZURE_REGIONS -split '[,\s]') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+
+Write-Output "📍 Processed Regions: $($REGIONS -join ', ')"
 
 $SUBSCRIPTION_ID = $env:AZURE_SUBSCRIPTION_ID
 $GPT_MIN_CAPACITY = $env:GPT_MIN_CAPACITY
