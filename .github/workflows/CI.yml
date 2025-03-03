@@ -47,7 +47,7 @@ jobs:
 
       # Set up Docker
     - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
       with:
        driver: docker
 
