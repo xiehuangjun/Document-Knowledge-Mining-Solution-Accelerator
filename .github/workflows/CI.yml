@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3  # Checks out your repository
+      uses: actions/checkout@v4  # Checks out your repository
       # Install Azure CLI
     - name: Install Azure CLI
       shell: pwsh
