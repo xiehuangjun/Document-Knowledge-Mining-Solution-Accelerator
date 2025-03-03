@@ -45,7 +45,7 @@
         "react-i18next": "^15.2.0",
         "react-markdown": "^9.0.3",
         "react-router-dom": "^7.2.0",
-        "react-tiff": "^0.0.11",
+        "react-tiff": "^0.0.14",
         "react-uploader": "^3.43.0",
         "use-debounce": "^10.0.4"
     },
@@ -81,7 +81,7 @@
         "postcss": "^8.4.49",
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.11",
-        "react-tiff": "^0.0.11",
+        "react-tiff": "^0.0.14",
         "sass": "^1.85.1",
         "tailwindcss": "^4.0.9",
         "ts-jest": "^29.1.2",

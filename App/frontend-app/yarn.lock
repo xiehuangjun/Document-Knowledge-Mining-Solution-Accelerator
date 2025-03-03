@@ -6511,7 +6511,7 @@ kleur@^3.0.3:
     react-i18next "^15.2.0"
     react-markdown "^9.0.3"
     react-router-dom "^7.2.0"
-    react-tiff "^0.0.11"
+    react-tiff "^0.0.14"
     react-uploader "^3.43.0"
     use-debounce "^10.0.4"
 
@@ -7679,10 +7679,10 @@ react-router@7.2.0:
     set-cookie-parser "^2.6.0"
     turbo-stream "2.4.0"
 
-react-tiff@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/react-tiff/-/react-tiff-0.0.11.tgz#dc6cb9f9d83a050ca92c160b4435156d52b204bc"
-  integrity sha512-mzhGfwDWsOKiIJitwqQAHWljj8+O+ZpCDixW67m/xg71org8uOkqZ4/j14yy2sgaCOF0wwSfQ1Va8myP4zgC0A==
+react-tiff@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/react-tiff/-/react-tiff-0.0.14.tgz#86dd6cc7ac8e53af557919d2e04b60d4c661c595"
+  integrity sha512-1lx8G8VaXPEdvqT8VVRZRc09HSVEPjS8TFnNDa6r/vuSd07i4t5SFcWeSUjmAqtRT30WbMCTaC05S+IH1hYHIQ==
   dependencies:
     axios "^1.1.3"
     i18next "^22.0.3"
