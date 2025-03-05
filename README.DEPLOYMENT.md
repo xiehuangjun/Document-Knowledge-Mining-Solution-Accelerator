@@ -37,6 +37,16 @@
 
 1. **Azure Access** - subscription-level `Owner` or `User Access Administrator` role required.
 
+ 1. **Microsoft.Compute** - Make sure to register the Microsoft.Compute.
+
+   Below are the steps need to follow:
+
+    * Log in to your Azure Portal.
+    * Navigate to your active Azure subscription.
+    * Go to Settings and click on "Resource  Providers".
+
+![alt text](image.png)
+
 
 ## Regional Availability
 
