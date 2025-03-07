@@ -37,6 +37,14 @@
 
 1. **Azure Access** - subscription-level `Owner` or `User Access Administrator` role required.
 
+1. **Microsoft.Compute Registration**  - Ensure that **Microsoft.Compute** is registered in your Azure subscription by following these steps:  
+   1. Log in to your **Azure Portal**.  
+   2. Navigate to your **active Azure subscription**.  
+   3. Go to **Settings** and select **Resource Providers**.
+   4. Check for Microsoft.Compute and click Register if it is not already registered.
+   <br>
+   <img src="./Images/readme_deployment/Subscription_ResourceProvider.png" alt="ResourceProvider" width="900">
+
 
 ## Regional Availability
 
@@ -74,13 +82,13 @@ Open PowerShell, change directory where you code cloned, then run the deploy scr
 cd .\Deployment\  
 ```  
 ```
-.\resourdedeployment.ps1
+.\resourcedeployment.ps1
 ```
 
 If you run into issue with PowerShell script file not being digitally signed, you can execute below command:
 
 ```
-powershell.exe -ExecutionPolicy Bypass -File ".\resourdedeployment.ps1"
+powershell.exe -ExecutionPolicy Bypass -File ".\resourcedeployment.ps1"
 ```
 
 You will be prompted for the following parameters with this Screen :  
@@ -140,10 +148,13 @@ Don't miss this Url information. This is the application's endpoint URL and it s
 | text-embedding-3-large | 200K TPM      |
 
 
+> **⚠️ Warning:**  **Insufficient quota can cause failures during the upload process.** Please ensure you have the recommended capacity or request for additional capacity before start uploading the files.
+
+
 1. Browse to Azure OpenAI Studio and select **each of the 2 models** within the `Deployments` menu:  
 <img src="./Images/readme_deployment/Control_Model_TPM000.png" alt="Select Model" width="700">
 
-1. Increase the TPM value for **each model** for faster report generation:  
+2. Increase the TPM value for **each model** for faster report generation:  
 <img src="./Images/readme_deployment/Control_Model_TPM001.png" alt="Set Token per minute" width="700">
 
 ### 2. Data Uploading and Processing
