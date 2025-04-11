@@ -116,7 +116,7 @@ You will be prompted for the following parameters with this Screen :
 
 ### Manual Deployment Steps:
 **Create Content Filter** - Please follow below steps
-> * Navigate to Azure AI Studio
+> * Navigate to project in Azure OpenAI, then go to Azure AI Foundry, select Safety + security
 > * Click on Create Content Filter and set the filters to a high threshold for the following categories:
     ```
     Hate, Sexual, Self-harm, Violence
@@ -138,7 +138,7 @@ Don't miss this Url information. This is the application's endpoint URL and it s
 
 > **Capacity Note:**
 > * The deployment script creates models with a setting of 1 token per minute (TPM) rate limit.
-> * Faster performance can be achieved by increasing the TPM limit with Azure OpenAI Studio.
+> * Faster performance can be achieved by increasing the TPM limit with Azure AI Foundry.
 > * Capacity varies for [regional quota limits](https://learn.microsoft.com/en-us/azure/ai-services/openai/quotas-limits#regional-quota-limits) as well as for [provisioned throughput](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/provisioned-throughput).
 > * As a starting point, we recommend the following quota threshold be set up for this service run.  
 
@@ -151,7 +151,7 @@ Don't miss this Url information. This is the application's endpoint URL and it s
 > **⚠️ Warning:**  **Insufficient quota can cause failures during the upload process.** Please ensure you have the recommended capacity or request for additional capacity before start uploading the files.
 
 
-1. Browse to Azure OpenAI Studio and select **each of the 2 models** within the `Deployments` menu:  
+1. Browse to the project in Azure AI Foundry, and select **each of the 2 models** within the `Deployments` menu:  
 <img src="./Images/readme_deployment/Control_Model_TPM000.png" alt="Select Model" width="700">
 
 2. Increase the TPM value for **each model** for faster report generation:  
