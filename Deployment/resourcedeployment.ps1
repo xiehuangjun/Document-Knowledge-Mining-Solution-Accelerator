@@ -683,7 +683,7 @@ try {
     # 6. Assign DNS Name to the public IP address
     #  6-1. Get Az Network resource Name with the public IP address
     Write-Host "Assign DNS Name to the public IP address" -ForegroundColor Green
-    $publicIpName=$(az network public-ip list --query "[?ipAddress=='$externalIP'].name" --output tsv)
+    $publicIpName=$(az network public-ip list --resource-group $aksResourceGroupName --query "[?ipAddress=='$externalIP'].name" --output tsv)
     #  6-2. Generate Unique backend API fqdn Name - esgdocanalysis-3 digit random number with padding 0
     $dnsName = "kmgs$($(Get-Random -Minimum 0 -Maximum 9999).ToString("D4"))"
     
@@ -917,32 +917,32 @@ try {
     # 2. Build and push the images to Azure Container Registry
     #  2-1. Build and push the AI Service container image to  Azure Container Registry
     #$acrAIServiceTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/aiservice"
-    docker build ..\App\backend-api\. --no-cache -t $acrAIServiceTag
+    docker build "../App/backend-api/." --no-cache -t $acrAIServiceTag
     docker push $acrAIServiceTag
 
     #  2-2. Build and push the Kernel Memory Service container image to Azure Container Registry
     #$acrKernelMemoryTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/kernelmemory"
-    docker build ..\App\kernel-memory\. --no-cache -t $acrKernelMemoryTag
+    docker build "../App/kernel-memory/." --no-cache -t $acrKernelMemoryTag
     docker push $acrKernelMemoryTag
 
     #  2-3. Build and push the Frontend App Service container image to Azure Container Registry
     #$acrFrontAppTag = "$($deploymentResult.AzContainerRegistryName).azurecr.io/$acrNamespace/frontapp"
-    docker build ..\App\frontend-app\. --no-cache -t $acrFrontAppTag
+    docker build "../App/frontend-app/." --no-cache -t $acrFrontAppTag
     docker push $acrFrontAppTag
 
 #======================================================================================================================================================================
 
     # 7.2. Deploy ClusterIssuer in Kubernetes for SSL/TLS certificate
-    kubectl apply -f .\kubernetes\deploy.certclusterissuer.yaml
+    kubectl apply -f "./kubernetes/deploy.certclusterissuer.yaml"
 
     # 7.3. Deploy Deployment in Kubernetes
-    kubectl apply -f .\kubernetes\deploy.deployment.yaml -n $kubenamespace
+    kubectl apply -f "./kubernetes/deploy.deployment.yaml" -n $kubenamespace
 
     # 7.4. Deploy Services in Kubernetes
-    kubectl apply -f .\kubernetes\deploy.service.yaml -n $kubenamespace
+    kubectl apply -f "./kubernetes/deploy.service.yaml" -n $kubenamespace
 
     # 7.5. Deploy Ingress Controller in Kubernetes for external access
-    kubectl apply -f .\kubernetes\deploy.ingress.yaml -n $kubenamespace
+    kubectl apply -f "./kubernetes/deploy.ingress.yaml" -n $kubenamespace
 
     # #####################################################################
     # # Data file uploading
