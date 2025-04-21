@@ -88,7 +88,7 @@ Quick deploy
 
 ### Prerequisites
 
-To use this solution accelerator, you will need access to an [Azure subscription](https://azure.microsoft.com/free/) with permission to create resource groups and resources. While not required, a prior understanding of Azure OpenAI, Azure AI Search, Azure AI Document Intelligence, Azure App Service, Azure Kubernetes Service, Azure Container Registry, Azure Blog Storage, Azure Queue Storage, and Azure Cosmos DB will be helpful.
+To use this solution accelerator, you will need access to an [Azure subscription](https://azure.microsoft.com/free/) with permission to create resource groups and resources. While not required, a prior understanding of Azure OpenAI, Azure AI Search, Azure AI Document Intelligence, Azure App Service, Azure Kubernetes Service, Azure Container Registry, Azure Blob Storage, Azure Queue Storage, and Azure Cosmos DB will be helpful.
 
 For additional training and support, please see:
 
@@ -129,7 +129,7 @@ Customer stories coming soon.
 Responsible AI Transparency FAQ 
 </h2>
 
-Please refer to [Transarency FAQ](./TRANSPARENCY_FAQ.md) for responsible AI transparency details of this solution accelerator.
+Please refer to [Transparency FAQ](./TRANSPARENCY_FAQ.md) for responsible AI transparency details of this solution accelerator.
 
 <br/>
 
