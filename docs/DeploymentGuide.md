@@ -1,4 +1,4 @@
-# Deployment Guide for Services
+# Deployment Guide
 
 > This repository presents a solution and reference architecture for the Knowledge Mining solution accelerator. Please note that the  **provided code serves as a demonstration and is not an officially supported Microsoft offering**.
 > 
@@ -10,8 +10,6 @@
 * [Deploy to Azure](#deploy-to-azure)
 * [Post-Deploy Configuration](#post-deploy-configuration)
 * [Next Steps](#next-steps)
-    * [Test APIs](./docs/TestApis.md)
-    * [Deploy Power Platform Client](./DeployPowerPlatformClient.md)
 
 ## Prerequisites
 
@@ -43,7 +41,7 @@
    3. Go to **Settings** and select **Resource Providers**.
    4. Check for Microsoft.Compute and click Register if it is not already registered.
    <br>
-   <img src="./Images/readme_deployment/Subscription_ResourceProvider.png" alt="ResourceProvider" width="900">
+   <img src="./images/deployment/Subscription_ResourceProvider.png" alt="ResourceProvider" width="900">
 
 
 ## Regional Availability
@@ -62,7 +60,7 @@ The deployment region for this model is fixed in 'East US'
 
 ## Deployment
 
-The automated deployment process is very straightforward and simplified via a single [deployment script](./Deployment/resourcedeployment.ps1) that completes in approximately 10-15 minutes:
+The automated deployment process is very straightforward and simplified via a single [deployment script](../Deployment/resourcedeployment.ps1) that completes in approximately 10-15 minutes:
 
 ### Automated Deployment Steps:
 1. Deploy Azure resources.
@@ -92,7 +90,7 @@ powershell.exe -ExecutionPolicy Bypass -File ".\resourcedeployment.ps1"
 ```
 
 You will be prompted for the following parameters with this Screen :  
-<img src="./Images/readme_deployment/Deployment_Screen01.png" width="900" alt-text="Input Parameters">  
+<img src="./images/deployment/Deployment_Screen01.png" width="900" alt-text="Input Parameters">  
 
 1. **Subscription ID** - copy/paste from Azure portal
 1. **Location** - Azure data center where resources will be deployed.
@@ -130,7 +128,7 @@ Let's check the message and configure your model's TPM rate higher to get better
 You can check the Application URL from the final console message.  
 Don't miss this Url information. This is the application's endpoint URL and it should be used for your data importing process.  
 
-<img src="./Images/readme_deployment/Deployment_Screen02.png" alt="Success Deployment" width="900">
+<img src="./images/deployment/Deployment_Screen02.png" alt="Success Deployment" width="900">
 
 ## Next Steps
 
@@ -152,10 +150,10 @@ Don't miss this Url information. This is the application's endpoint URL and it s
 
 
 1. Browse to the project in Azure AI Foundry, and select **each of the 2 models** within the `Deployments` menu:  
-<img src="./Images/readme_deployment/Control_Model_TPM000.png" alt="Select Model" width="700">
+<img src="./images/deployment/Control_Model_TPM000.png" alt="Select Model" width="700">
 
 2. Increase the TPM value for **each model** for faster report generation:  
-<img src="./Images/readme_deployment/Control_Model_TPM001.png" alt="Set Token per minute" width="700">
+<img src="./images/deployment/Control_Model_TPM001.png" alt="Set Token per minute" width="700">
 
 ### 2. Data Uploading and Processing
 After increasing the TPM limit for each model, let's upload and process the sample documents.
