@@ -1,7 +1,5 @@
 # Document knowledge mining solution accelerator
 
-{🟨TODO: Update with 3-4 sentence descritpion of the solution}
-
 Ingest, extract, and classify content from a high volume of assets to gain deeper insights and generate relevant suggestions for quick and easy reasoning. This enables the ability to conduct chat-based insight discovery, analysis, and receive suggested prompt guidance to further explore your data.
 
 <br/>
@@ -74,7 +72,7 @@ Follow the quick deploy steps on the deployment guide to deploy this solution 
 
 <br/>
 
-### Prerequisites and Costs
+### Prerequisites and costs
 
 To deploy this solution accelerator, ensure you have access to an [Azure subscription](https://azure.microsoft.com/free/) with the necessary permissions to create **resource groups, resources, app registrations, and assign roles at the resource group level**. This should include Contributor role at the subscription level and  Role Based Access Control role on the subscription and/or resource group level. Follow the steps in [Azure Account Set Up](./docs/AzureAccountSetUp.md).
 
@@ -121,7 +119,7 @@ either by deleting the resource group in the Portal or running `azd down`.
 
 <br /><br />
 <h2><img src="./docs/images/readme/business-scenario.png" width="48" />
-Business Use Case
+Business use case
 </h2>
 
 
