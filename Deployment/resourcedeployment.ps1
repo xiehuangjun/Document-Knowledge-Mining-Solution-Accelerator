@@ -398,17 +398,20 @@ class DeploymentResult {
 
 function Check-Docker {
     try {
-         # Try to get Docker info to check if Docker daemon is running
-         $dockerInfo = docker info 2>&1
-        if ($dockerInfo -match "ERROR: error during connect") {
+        # Try to get Docker info to check if Docker daemon is running
+        $dockerInfo = docker info 2>&1
+        if ($LASTEXITCODE -ne 0 -or $dockerInfo -match "error during connect") {
             return $false
-        } else {
+        }
+        else {
             return $true
         }
-    } catch {
+    }
+    catch {
         Write-Host "An error occurred while checking Docker status." -ForegroundColor Red
         Write-Host $_.Exception.Message -ForegroundColor Red
-        return $false    }
+        return $false    
+    }
 }
 
 # Check if Docker is running before proceeding
