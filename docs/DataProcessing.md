@@ -1,4 +1,4 @@
-## Content Processing
+## Content and Data Processing Workflow
 Additional details about how content processing is handled in the solution. This includes the workflow steps and how to use your own data in the solution.
 
 ### Workflow

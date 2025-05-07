@@ -24,9 +24,9 @@ This solution leverages Azure OpenAI and Azure AI Document Intelligence in a hyb
 ### How to customize
 If you'd like to customize the solution accelerator, here are some common areas to start:
 
-[Technical Architecture](./docs/TechnicalArchitecture.md)
+[Technical architecture](./docs/TechnicalArchitecture.md)
 
-[Content and Data Processing Workflow](./docs/DataProcessing.md)
+[Content and data processing workflow](./docs/DataProcessing.md)
 
 <br/>
 
