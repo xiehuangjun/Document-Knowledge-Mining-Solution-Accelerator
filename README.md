@@ -171,7 +171,6 @@ Supporting documentation
 
 ### Security guidelines
 
-
 This template uses Azure Key Vault to store all connections to communicate between resources.
 
 This template also uses [Managed Identity](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview) for local development and deployment.
@@ -180,7 +179,7 @@ To ensure continued best practices in your own repository, we recommend that any
 
 You may want to consider additional security measures, such as:
 
-* Enabling Microsoft Defender for Cloud to [secure your Azure resources](https://learn.microsoft.com/azure/security-center/defender-for-cloud).
+* Enabling Microsoft Defender for Cloud to [secure your Azure resources](https://learn.microsoft.com/en-us/azure/defender-for-cloud/).
 * Protecting the Azure Container Apps instance with a [firewall](https://learn.microsoft.com/azure/container-apps/waf-app-gateway) and/or [Virtual Network](https://learn.microsoft.com/azure/container-apps/networking?tabs=workload-profiles-env%2Cazure-cli).
 
 <br/>
@@ -192,7 +191,7 @@ Check out similar solution accelerators
 |---|---|
 | [Conversation&nbsp;knowledge&nbsp;mining](https://github.com/microsoft/Conversation-Knowledge-Mining-Solution-Accelerator) | Derive insights from volumes of conversational data using generative AI. It offers key phrase extraction, topic modeling, and interactive chat experiences through an intuitive web interface. |
 | [Content&nbsp;processing](https://github.com/microsoft/content-processing-solution-accelerator) | Programmatically extract data and apply schemas to unstructured documents across text-based and multi-modal content using Azure AI Foundry, Azure OpenAI, Azure AI Content Understanding, and Azure Cosmos DB. |
-| [Build&nbsp;your&nbsp;own&nbsp;copilot&nbsp;-&nbsp;client&nbsp;advisor](https://github.com/microsoft/document-generation-solution-accelerator) | This copilot helps client advisors to save time and prepare relevant discussion topics for scheduled meetings. It provides an overview of daily client meetings with seamless navigation between viewing client profiles and chatting with structured data. |
+| [Build&nbsp;your&nbsp;own&nbsp;copilot&nbsp;-&nbsp;client&nbsp;advisor](https://github.com/microsoft/build-your-own-copilot-solution-accelerator) | This copilot helps client advisors to save time and prepare relevant discussion topics for scheduled meetings. It provides an overview of daily client meetings with seamless navigation between viewing client profiles and chatting with structured data. |
 
 
 <br/>   
@@ -200,7 +199,7 @@ Check out similar solution accelerators
 
 ## Provide feedback
 
-Have questions, find a bug, or want to request a feature? [Submit a new issue](https://github.com/microsoft/document-knowledge-mining-solution-acclerator/issues) on this repo and we'll connect.
+Have questions, find a bug, or want to request a feature? [Submit a new issue](https://github.com/microsoft/document-knowledge-mining-solution-accelerator/issues) on this repo and we'll connect.
 
 <br/>
 
