@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 @description('The Data Center where the model is deployed.')
 param modeldatacenter string
+var abbrs = loadJsonContent('./abbreviations.json')
 
 targetScope = 'subscription'
 var resourceprefix = padLeft(take(uniqueString(deployment().name), 5), 5, '0')
@@ -9,26 +10,26 @@ var resourceprefix_name = 'kmgs'
 
 // Create a resource group
 resource gs_resourcegroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: 'rg-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.managementGovernance.resourceGroup}${resourceprefix_name}${resourceprefix}'
   location: deployment().location
 }
 
 // Create a storage account
 module gs_storageaccount 'bicep/azurestorageaccount.bicep' = {
-  name: 'blob${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.storage.storageAccount}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    storageAccountName: 'blob${resourceprefix}'
+    storageAccountName: '${abbrs.storage.storageAccount}${resourceprefix}'
     location: deployment().location
   }
 }
 
 // Create a Azure Search Service
 module gs_azsearch 'bicep/azuresearch.bicep' = {
-  name: 'search-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.ai.aiSearch}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    searchServiceName: 'search-${resourceprefix}'
+    searchServiceName: '${abbrs.ai.aiSearch}${resourceprefix}'
     location: deployment().location
   }
 }
@@ -36,20 +37,20 @@ module gs_azsearch 'bicep/azuresearch.bicep' = {
 
 // Create Container Registry
 module gs_containerregistry 'bicep/azurecontainerregistry.bicep' = {
-  name: 'acr${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.containers.containerRegistry}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    acrName: 'acr${resourceprefix_name}${resourceprefix}'
+    acrName: '${abbrs.containers.containerRegistry}${resourceprefix_name}${resourceprefix}'
     location: deployment().location
   }
 }
 
 // Create AKS Cluster
 module gs_aks 'bicep/azurekubernetesservice.bicep' = {
-  name: 'aks-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.compute.arcEnabledKubernetesCluster}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    aksName: 'aks-${resourceprefix_name}${resourceprefix}'
+    aksName: '${abbrs.compute.arcEnabledKubernetesCluster}${resourceprefix_name}${resourceprefix}'
     location: deployment().location
   }
   dependsOn: [
@@ -74,20 +75,20 @@ module gs_aks 'bicep/azurekubernetesservice.bicep' = {
 
 // Create Azure Cognitive Service
 module gs_azcognitiveservice 'bicep/azurecognitiveservice.bicep' = {
-  name: 'cognitiveservice-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.ai.documentIntelligence}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    cognitiveServiceName: 'cognitiveservice-${resourceprefix_name}${resourceprefix}'
+    cognitiveServiceName: '${abbrs.ai.documentIntelligence}${resourceprefix_name}${resourceprefix}'
     location: 'eastus'
   }
 }
 
 // Create Azure Open AI Service
 module gs_openaiservice 'bicep/azureopenaiservice.bicep' = {
-  name: 'openaiservice-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.ai.openAIService}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    openAIServiceName: 'openaiservice-${resourceprefix_name}${resourceprefix}'
+    openAIServiceName: '${abbrs.ai.openAIService}${resourceprefix_name}${resourceprefix}'
     // GPT-4-32K model & GPT-4o available Data center information.
     // https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models#gpt-4    
     location: modeldatacenter
@@ -138,10 +139,10 @@ module gs_openaiservicemodels_text_embedding 'bicep/azureopenaiservicemodel.bice
 
 // Create Azure Cosmos DB Mongo
 module gs_cosmosdb 'bicep/azurecosmosdb.bicep' = {
-  name: 'cosmosdb-${resourceprefix_name}${resourceprefix}'
+  name: '${abbrs.databases.cosmosDBDatabase}${resourceprefix_name}${resourceprefix}'
   scope: gs_resourcegroup
   params: {
-    cosmosDbAccountName: 'cosmosdb-${resourceprefix_name}${resourceprefix}'
+    cosmosDbAccountName: '${abbrs.databases.cosmosDBDatabase}${resourceprefix_name}${resourceprefix}'
     location: deployment().location
   }
 }
@@ -157,7 +158,7 @@ module gs_appconfig 'bicep/azureappconfigservice.bicep' = {
 }
 
 // return all resource names as a output
-output gs_resourcegroup_name string = 'rg-${resourceprefix_name}${resourceprefix}'
+output gs_resourcegroup_name string = '${abbrs.managementGovernance.resourceGroup}${resourceprefix_name}${resourceprefix}'
 output gs_solution_prefix string = '${resourceprefix_name}${resourceprefix}'
 output gs_storageaccount_name string = gs_storageaccount.outputs.storageAccountName
 output gs_azsearch_name string = gs_azsearch.outputs.searchServiceName
