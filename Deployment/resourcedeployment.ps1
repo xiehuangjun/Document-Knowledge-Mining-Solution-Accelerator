@@ -151,7 +151,7 @@ function LoginAzure([string]$subscriptionID) {
         write-host "CI deployment mode"
         }
         else{
-              az login
+              az login --use-device-code
         write-host "manual deployment mode"
         }
         az account set --subscription $subscriptionID
